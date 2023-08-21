@@ -1,0 +1,8 @@
+[
+    {
+        "name": "Копченая курица",
+        "image": "image",
+        "status": "true",
+        "recipes": "строка"
+    }
+]

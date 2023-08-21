@@ -1,0 +1,425 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+
+import 'package:goldensmoker/getX/commandFile.dart';
+import 'package:goldensmoker/getX/getxGolden.dart';
+import 'package:goldensmoker/getX/reciept.dart';
+
+import 'numberpicker.dart';
+import 'timer.dart';
+
+void main() => runApp(const App());
+
+class App extends StatelessWidget {
+  const App({super.key});
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+    return GetMaterialApp(
+      theme: ThemeData.dark(),
+      home: HomePage(),
+      getPages: [
+        GetPage(name: "/", page: () => HomePage()),
+        GetPage(name: "/two", page: () => const DirectControl()),
+        GetPage(name: "/three", page: () => const Correction()),
+      ],
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
+  @override
+  Widget build(BuildContext context) {
+    BluetoothUser bluetoothController = Get.put(BluetoothUser());
+    return Scaffold(
+      body: SafeArea(
+          child: Container(
+        color: Colors.amber,
+        padding: const EdgeInsets.all(defaultPadding),
+        alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Obx(() => Text('${bluetoothController.nameDev} / ${bluetoothController.bluetoothState}')),
+            Obx(() => Text('${bluetoothController.dataString}')),
+            Obx(() => Text('${bluetoothController.tp} / ${bluetoothController.tb} / ${bluetoothController.step}')),
+            MaterialButton(              
+              onPressed: () => Get.toNamed('two'),
+              color: Colors.blue,
+              child: const Text('Ptwo'),
+            ),
+            MaterialButton(              
+              onPressed: () => Get.toNamed('three'),
+              color: Colors.blue,
+              child: const Text('Pthree'),
+            ),
+          ],
+        ),
+      )),
+    );
+  }
+}
+
+class DirectControl extends StatelessWidget {
+  const DirectControl({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    BluetoothUser bluetoothController = Get.put(BluetoothUser());
+    Size size = MediaQuery.of(context).size;
+    TextStyle stTxt = TextStyle(fontSize: size.height * 0.07,fontWeight: FontWeight.bold);
+    return Scaffold(
+      backgroundColor: mainFon,
+      appBar: AppBarMetod(),
+      body: SafeArea(
+          child: Center(
+        child: SizedBox(
+          width: size.width * 0.75, // 961
+          height: size.height * 0.8, // 552
+          child: Column(
+            children: [
+
+              SizedBox(
+                height: size.height * 0.2,
+                width: double.infinity,
+                child: Row(children: [
+                Expanded(flex: 3, child: StackContaner(name: 'Температура',content: SliderControl())),
+                const SizedBox(width: defaultPadding),
+                Expanded(child: StackContaner(name: 't камеры',content: Obx(() => Text('${bluetoothController.tp}',style: stTxt)))),
+                const SizedBox(width: defaultPadding),
+                Expanded(child: StackContaner(name: 't продукта',content: Obx(() => Text('${bluetoothController.tb}',style: stTxt)))),
+                ],),
+              ),
+
+              const SizedBox(height: defaultPadding),
+              
+              SizedBox(
+                height: size.height * 0.38,
+                width: double.infinity,
+                child: Row(children: [
+                Expanded(flex: 4, 
+                child: StackContaner(name: 'Сообщения',
+                content: Obx(() => ListView.builder(
+                  itemCount: bluetoothController.listMsg.length,
+                  itemBuilder: (context, index) => Text('${bluetoothController.listMsg[index]}', textAlign: TextAlign.center,),
+                )))),
+                const SizedBox(width: defaultPadding),
+                
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                  StackContaner(name: 'Заслонка',content: SwitchControlsAir()),
+                  // const SizedBox(height: defaultPadding),
+                  StackContaner(name: 'Компрессор',content: SwitchControlsSmoke()),
+                  // const SizedBox(height: defaultPadding),
+                  StackContaner(name: 'Пароген',content: SwitchControlsWater()),
+                  ],),
+                ),
+                ],),
+              ),
+
+              const SizedBox(height: defaultPadding * 1.5),
+              const Center(child: ContanerButtons()),
+            ],
+          ),
+        ),
+      )),
+    );
+  }
+
+  AppBar AppBarMetod() {
+    return AppBar(
+      backgroundColor: mainFon,
+      elevation: 0,
+      title: const Center(
+          child: Text('Прямое управление',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold))),
+      actions: <Widget>[
+        IconButton(onPressed: () {Get.offAllNamed('/');}, icon: const Icon(Icons.search)),
+      ],
+    );
+  }
+}
+
+class SwitchControlsAir extends StatelessWidget {
+  const SwitchControlsAir({super.key});
+  @override
+  Widget build(BuildContext context) {
+    BluetoothUser bluetoothController = Get.put(BluetoothUser());
+    return GetBuilder<AllStateWidget>(
+      init: AllStateWidget(),
+      builder: (on) => Switch(
+    value: on.isSwitchedAir.value,
+    onChanged: (value) {
+       on.isToggleAir();
+       bluetoothController.sendMessage(on.message); //заслонка
+    },
+    activeTrackColor: Colors.amberAccent,
+    activeColor: Colors.amber,
+      ) 
+      );
+  }
+}
+
+class SwitchControlsSmoke extends StatelessWidget {
+  const SwitchControlsSmoke({super.key});
+  @override
+  Widget build(BuildContext context) {
+    BluetoothUser bluetoothController = Get.put(BluetoothUser());
+    return GetBuilder<AllStateWidget>(
+      init: AllStateWidget(),
+      builder: (on) => Switch(
+    value: on.isSwitchedSmoke.value,
+    onChanged: (value) {
+       on.isToggleSmoke();
+       bluetoothController.sendMessage(on.message); //заслонка
+    },
+    activeTrackColor: Colors.amberAccent,
+    activeColor: Colors.amber,
+      ) 
+      );
+      
+  }
+}
+
+class SwitchControlsWater extends StatelessWidget {
+  const SwitchControlsWater({super.key});
+  @override
+  Widget build(BuildContext context) {
+    BluetoothUser bluetoothController = Get.put(BluetoothUser());
+    return GetBuilder<AllStateWidget>(
+      init: AllStateWidget(),
+      builder: (on) => Switch(
+    value: on.isSwitchedWater.value,
+    onChanged: (value) {
+       on.isToggleWater();
+       bluetoothController.sendMessage(on.message); //заслонка
+    },
+    activeTrackColor: Colors.amberAccent,
+    activeColor: Colors.amber,
+      ) 
+      );
+      
+  }
+}
+
+class StackContaner extends StatelessWidget {
+  final Widget content;
+  final String name;
+  const StackContaner({
+    Key? key,
+    required this.content,
+    required this.name,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    return Stack(
+      alignment: AlignmentDirectional.topStart,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: size.height * 0.013),
+          padding: EdgeInsets.symmetric(horizontal: defaultPadding),
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.white, width: 2),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Center(child: content),
+        ),
+        Positioned(
+          left: size.height * 0.026,
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: size.height * 0.006),
+            color: mainFon,
+            child: Text('${name}', style: TextStyle(fontSize: size.height * 0.026),),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class SliderControl extends StatelessWidget {
+  const SliderControl({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    BluetoothUser bluetoothController = Get.put(BluetoothUser());
+    AllStateWidget allStateWidget = Get.put(AllStateWidget());
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: defaultPadding),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(child: Obx(() => FittedBox(child: Text('${allStateWidget.range.value.round()}°', )),)),
+            Expanded(
+              child: Obx(() => Slider(
+                activeColor: Colors.amber,
+                inactiveColor: Colors.grey,
+                min: 0.0,
+                max: 150.0,
+                value: allStateWidget.range.value,
+                onChanged: (value) => allStateWidget.setRange(value),
+                onChangeEnd: (value) {
+                  bluetoothController.sendMessage(allStateWidget.message);
+                },
+              ),),
+            ),
+          ],
+        ),
+    );
+  }
+}
+
+class ContanerButtons extends StatelessWidget {
+  const ContanerButtons({super.key});
+  @override
+  Widget build(BuildContext context) {
+    BluetoothUser bluetoothController = Get.put(BluetoothUser());
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.white, width: 2),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly, 
+      children: [
+        FittedBox(child: IconButton(
+          onPressed: (){bluetoothController.sendMessage(RECIPE_STOP);}, 
+            icon: const Icon(Icons.close))  
+            ),
+        const VerticalDivider(),
+        FittedBox(child: IconButton(
+          onPressed: (){bluetoothController.sendMessage(RECIPE_PAUSE );}, //RECIPE_CONTINUE
+        icon: const Icon(Icons.pause))
+        ),
+        const VerticalDivider(),
+        FittedBox(child: IconButton(
+          onPressed: (){bluetoothController.sendMessage(RECIPE_START);}, 
+        icon: const Icon(Icons.play_arrow))
+        ),
+      ]),
+    );
+  }
+}
+
+class ContentIndicators extends StatelessWidget {
+  const ContentIndicators({
+    Key? key,
+    required this.title,
+    required this.value,
+  }) : super(key: key);
+  final String title;
+  final Widget value;
+  
+  @override
+  Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    const bigSize = 0.07;
+    const smSize = 0.03;
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+      Text(title, style: TextStyle(fontSize: size.height * smSize)),
+      Row(
+        children: [
+        value,
+        Text('°', style: TextStyle(fontSize: size.height * bigSize, fontWeight: FontWeight.bold, color: Colors.grey)),
+        Icon(Icons.arrow_upward_sharp, color: Colors.red, size: size.height * bigSize,),
+      ],),
+    ]);
+  }
+}
+
+
+/////////////////////////////////////
+///
+
+
+class Correction extends StatelessWidget {
+  const Correction({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: mainFon,
+      appBar: AppBarMetod(),
+      body: SafeArea(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              //наполнение
+              SizedBox(
+                width: double.infinity,
+                height: 325,
+                child: RecipeController().widgetAllStage()),
+              const SizedBox(height: defaultPadding),
+  
+            ],),
+          )),
+    );
+  }
+
+
+
+  AppBar AppBarMetod() {
+    return AppBar(
+        backgroundColor: mainFon,
+        elevation: 0,
+        title: Center(child: Text('Коррекция рецепта', style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),)),
+        actions: <Widget>[
+           Center(child: SizedBox(width: 60,child: Clock())),
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.search)),
+        ],
+      );
+  }
+
+  TimerBuilder Clock() {
+    return TimerBuilder.periodic(Duration(seconds: 1), builder: (context) {
+            return Text("${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}");
+          });
+  }
+}
+
+String formatDuration(Duration d) {
+  String f(int n) {
+    return n.toString().padLeft(2, '0');
+  }
+  d += Duration(microseconds: 999999);
+  return "${f(d.inMinutes)}:${f(d.inSeconds % 60)}";
+}
+
+
+class Picker extends StatefulWidget {
+  const Picker({
+    Key? key,
+  }) : super(key: key);
+  @override
+  State<Picker> createState() => _PickerState();
+}
+
+class _PickerState extends State<Picker> {
+  int _currentValue = 0;
+  @override
+  Widget build(BuildContext context) {
+    return NumberPicker(
+          value: _currentValue,
+          minValue: 0,
+          maxValue: 100,
+          onChanged: (value) => setState(() => _currentValue = value),
+          );
+  }
+}
+
+
