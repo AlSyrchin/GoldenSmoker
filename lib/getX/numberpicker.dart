@@ -116,7 +116,7 @@ class _NumberPickerState extends State<NumberPicker> {
       }
     }
     Future.delayed(
-      Duration(milliseconds: 100),
+      const Duration(milliseconds: 100),
       () => _maybeCenterValue(),
     );
   }
@@ -197,7 +197,7 @@ class _NumberPickerState extends State<NumberPicker> {
     final defaultStyle = widget.textStyle ?? themeData.textTheme.bodyMedium;
     final selectedStyle = widget.selectedTextStyle ??
         themeData.textTheme.headlineSmall
-            ?.copyWith(color: Colors.black87);
+            ?.copyWith(color: Colors.amber);
 
     final value = _intValueFromIndex(index % itemCount);
     final isExtra = !widget.infiniteLoop &&

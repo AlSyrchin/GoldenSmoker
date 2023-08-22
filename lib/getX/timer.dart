@@ -1,25 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-/// Used by TimerBuilder to determine the next DateTime to trigger a rebuild on
 typedef DateTime? TimerGenerator(DateTime now);
 
-/// A widget that rebuilds on specific and / or periodic Timer events.
 class TimerBuilder extends StatefulWidget {
   final WidgetBuilder builder;
   final TimerGenerator generator;
 
-  /// Use this constructor only if you need to provide a custom TimerGenerator.
-  /// For general cases, prefer to use [TimerBuilder.periodic] and [TimerBuilder..scheduled]
-  /// This constructor accepts a custom generator function that returns the next time event
-  /// to rebuild on.
   TimerBuilder({
-    /// Returns the next time event. If the returned time is in the past, it will be ignored and
-    /// the generator will be called again to retrieve the next time event.
-    /// If the generator returns [null], it indicates the end of time event sequence.
     required this.generator,
-
-    /// Builds the widget. Called for every time event or when the widget needs to be built/rebuilt.
     required this.builder,
   });
 
@@ -28,24 +17,15 @@ class TimerBuilder extends StatefulWidget {
     return _TimerBuilderState();
   }
 
-  /// Rebuilds periodically
   TimerBuilder.periodic(
     Duration interval, {
-
-    /// Specifies the alignment unit for the generated time events. Specify Duration.zero
-    /// if you want no alignment. By default, the alignment unit is computed from the interval.
     Duration? alignment,
-
-    /// Builds the widget. Called for every time event or when the widget needs to be built/rebuilt.
     required this.builder,
   }) : this.generator = periodicTimer(interval,
             alignment: alignment ?? getAlignmentUnit(interval));
 
-  /// Rebuilds on a schedule
   TimerBuilder.scheduled(
     Iterable<DateTime> schedule, {
-
-    /// Builds the widget. Called for every time event or when the widget needs to be built/rebuilt.
     required this.builder,
   }) : this.generator = scheduledTimer(schedule);
 }
@@ -118,8 +98,6 @@ TimerGenerator fromIterable(Iterable<DateTime> iterable) {
   };
 }
 
-/// Creates a stream tha produces DateTime objects at the times specified by the [generator].
-/// Stops the stream when [stopSignal] is received.
 Stream<DateTime> createTimerStream(
   TimerGenerator generator,
   Future stopSignal,
@@ -138,9 +116,6 @@ Stream<DateTime> createTimerStream(
   }
 }
 
-/// Returns an alignment unit can be passed to [alignDateTime] in order to align
-/// the date/time units. For example, if the specified interval is 15 minutes,
-/// the alignment unit is 1 minute.
 Duration getAlignmentUnit(Duration interval) {
   return Duration(
     days: interval.inDays > 0 ? 1 : 0,
@@ -154,10 +129,6 @@ Duration getAlignmentUnit(Duration interval) {
   );
 }
 
-/// Rounds down or up a [DateTime] object using a [Duration] object.
-/// If [roundUp] is true, the result is rounded up, otherwise it's rounded down.
-/// If the duration is a multiple of days, the result will be aligned at
-/// the day mark in the timezone of the source datetime.
 DateTime alignDateTime(DateTime dt, Duration alignment,
     [bool roundUp = false]) {
   assert(alignment >= Duration.zero);

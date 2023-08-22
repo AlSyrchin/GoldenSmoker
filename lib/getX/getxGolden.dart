@@ -14,7 +14,6 @@ const Color mainFon = Color.fromRGBO(31, 10, 9, 1);
 const defaultPadding = 20.0;
 
 
-
 class AllStateWidget extends GetxController{
   RxDouble range = 1.0.obs;
   RxBool isSwitchedAir = false.obs;

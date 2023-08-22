@@ -2,267 +2,236 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'goldenWidget.dart';
-import 'timer.dart';
-
-const String indicate = '°';
-    const style20t = TextStyle(fontSize: 20, color: Colors.black);
-    const style24t = TextStyle(fontSize: 24, color: Colors.black);
-    const style20f = TextStyle(fontSize: 20, color: Colors.black26);
-    const style24f = TextStyle(fontSize: 24, color: Colors.black26);
+import 'commandFile.dart';
+import 'recieptsStep.dart';
 
 String convertDoubleFromString(double param) {
   return '${(param * 10).toInt()}';
 }
 
-abstract class Stage {
-  String generateStringCommand();
-  Widget generateWidgetInfo();
-}
-
-
-class RecipeController extends GetxController{
-  RxList<Stage> listStages = <Stage>[Related(10), Drying(20, 30)].obs;
-  int indexCurrentStage  = 1;
+class RecipeController extends GetxController {
+  RxList<Stage> listStages = <Stage>[].obs;
+  int indexCurrentStage = 1;
 
   Widget widgetCurrentStage() {
     return listStages[indexCurrentStage].generateWidgetInfo();
   }
 
-   Widget widgetAllStage() {
-    return ListView(
-      scrollDirection: Axis.horizontal,
-      children: 
-      [
-        ...listStages.map((e) => Container(
-        margin: const EdgeInsets.symmetric(horizontal: 20),
-                width: 260,
-                height: 325,
-                color: Colors.white,
-                child: e.generateWidgetInfo()
-        )
-      ).toList(),
-      ElevatedButton(
-        onPressed: () => Get.toNamed('newrecipe'),
-        child: const Text('New')
-        )
-      ]);
+  Widget widgetAllStage() {
+    return ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: listStages.length,
+        itemBuilder: (context, index) => Card(
+              color: Colors.white,
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox(
+                  width: 260,
+                  height: 325,
+                  child: Column(
+                    children: [
+                      listStages[index].generateWidgetInfo(),
+                      IconButton(
+                        onPressed: () => removeStageIndex(index),
+                        icon: const Icon(Icons.delete, color: Colors.red),
+                      )
+                    ],
+                  )),
+            ));
   }
 
-  void nextStage(){}
-
-  void sendRecipe() {
-    String result = listStages.map<String>((e) => e.generateStringCommand()).join('_'); // "MB500~M!W_MB600~M!S"
-    
+  void removeStageIndex(int index){
+    if (listStages.isNotEmpty) listStages.removeAt(index);
   }
 
+    void editStageIndex(int index, double val, int? time){
+      listStages[index].copyW(val, time);
+      update();
+    }
+
+  void nextStage() {}
+
+  String sendRecipe() {
+    return listStages.map<String>((e) => e.generateStringCommand()).join('_');
+  }
+}
+
+
+abstract class Stage {
+  String generateStringCommand();
+  Widget generateWidgetInfo();
+  Stage copyW(double? d, int? i);
 }
 
 //Отепление
 class Related extends Stage {
-  final double value;
+   double value;
   final String name = 'Отепление';
   Related(this.value);
 
   @override
   String generateStringCommand() {
-    return "MP${convertDoubleFromString(value)}~M!TF";
+    return "$RECIPE_ADD${ACTION_INPUT}MP${convertDoubleFromString(value)}~M!TF";
   }
 
   @override
   Widget generateWidgetInfo() {
     return ListViewCard(name: name, tProd: value); // + ten
   }
+  
+  Related copyWith(
+    double? value,
+  ) {
+    return Related(
+      value ?? this.value,
+    );
+  }
+  
+  @override
+  Stage copyW(double? d, int? i) {
+    return copyWith(d);
+  }
 }
 
 //Сушка
 class Drying extends Stage {
-  final double value;
-  final int valueMT;
+   double value;
+   int valueMT;
   final String name = 'Сушка';
   Drying(this.value, this.valueMT);
 
   @override
   String generateStringCommand() {
-    return "MP${convertDoubleFromString(value)}MT$valueMT~M!TFA";
+    return "$RECIPE_ADD${ACTION_INPUT}MP${convertDoubleFromString(value)}MT$valueMT~M!TFA";
   }
 
   @override
   Widget generateWidgetInfo() {
-    return ListViewCard(name: name, tProd: value, zaslon: true, time: valueMT,);// + ten + vitzhka
+    return ListViewCard(
+      name: name,
+      tProd: value,
+      zaslon: true,
+      time: valueMT,
+    ); // + ten + vitzhka
+  }
+
+  Drying copyWith(
+    double? value,
+    int? valueMT,
+  ) {
+    return Drying(
+      value ?? this.value,
+      valueMT ?? this.valueMT,
+    );
+  }
+  
+  @override
+  Stage copyW(double? d, int? i) {
+    return copyWith(d, i);
   }
 }
 
 //Варка
 class Boiling extends Stage {
-   final double value;
-  final int valueMT;
+   double value;
+   int valueMT;
   final String name = 'Варка';
   Boiling(this.value, this.valueMT);
 
   @override
   String generateStringCommand() {
-    return "MP${convertDoubleFromString(value)}MT$valueMT~M!WTF";
+    return "$RECIPE_ADD${ACTION_INPUT}MP${convertDoubleFromString(value)}MT$valueMT~M!WTF";
   }
 
   @override
   Widget generateWidgetInfo() {
-    return ListViewCard(name: name, tProd: value, parogen: true, time: valueMT,); // + ten
+    return ListViewCard(
+      name: name,
+      tProd: value,
+      parogen: true,
+      time: valueMT,
+    ); // + ten
   }
-
+  
+  Boiling copyWith(
+    double? value,
+    int? valueMT,
+   ) {
+    return Boiling(
+      value ?? this.value,
+      valueMT ?? this.valueMT,
+    );
+  }
+  
+  @override
+  Stage copyW(double? d, int? i) {
+    return copyWith(d, i);
+  }
 }
 
 //Копчение
 class Smoking extends Stage {
-  final double value;
-  final int valueMT;
+   double value;
+   int valueMT;
   final String name = 'Копчение';
   Smoking(this.value, this.valueMT);
 
   @override
   String generateStringCommand() {
-    return "MB${convertDoubleFromString(value)}MT$valueMT~M!TFS";
+    return "$RECIPE_ADD${ACTION_INPUT}MB${convertDoubleFromString(value)}MT$valueMT~M!TFS";
   }
 
   @override
   Widget generateWidgetInfo() {
-    return ListViewCard(name: name, tBox: value, compres: true, time: valueMT,); // + ten + vitzhka
+    return ListViewCard(
+      name: name,
+      tBox: value,
+      compres: true,
+      time: valueMT,
+    ); // + ten + vitzhka
+  }
+
+  Smoking copyWith(
+    double? value,
+    int? valueMT,
+  ) {
+    return Smoking(
+      value ?? this.value,
+      valueMT ?? this.valueMT,
+    );
+  }
+  
+  @override
+  Stage copyW(double? d, int? i) {
+    return copyWith(d, i);
   }
 }
 
 //Жарка / Прогрев
 class Frying extends Stage {
-  final double value;
+  double value;
   final String name = 'Жарка';
   Frying(this.value);
 
   @override
   String generateStringCommand() {
-    return "MB${convertDoubleFromString(value)}~M!TF";
+    return "$RECIPE_ADD${ACTION_INPUT}MB${convertDoubleFromString(value)}~M!TF";
   }
 
   @override
   Widget generateWidgetInfo() {
     return ListViewCard(name: name, tProd: value); //+ ten
   }
-}
 
-
-///////////////////////////////////////////////////////////////////////Шаблон
-class ListViewCard extends StatelessWidget {
-  const ListViewCard({
-    Key? key,
-    required this.name,
-    this.tBox,
-    this.tProd,
-    this.time,
-    this.parogen,
-    this.compres,
-    this.zaslon,
-  }) : super(key: key);
-  final String name;
-  final double? tBox;
-  final double? tProd;
-  final int? time;
-  final bool? parogen;
-  final bool? compres;
-  final bool? zaslon;
-  @override
-  Widget build(BuildContext context) {
-    const stWidg = VisualDensity(horizontal: 0, vertical: -4);
-    return 
-    Column(
-      children: [
-        Text(name, style: style24t),
-        ListTile(
-          onTap: () => tBox!= null ? dialog(context, deviceStep[0],) :() {},
-          visualDensity: stWidg,
-          dense:true,
-          title: tBox != null ? Text(deviceStep[0], style: style24t) : Text(deviceStep[0], style: style24f),
-          trailing: tBox != null ? Text('${tBox!.toInt()}$indicate', style: style24t) : Text('1$indicate', style: style24f),
-        ),
-        ListTile(
-          visualDensity: stWidg,
-          dense:true,
-          onTap: () => tProd!= null ? dialog(context, deviceStep[1],) :() {},
-          title: tProd != null ? Text(deviceStep[1], style: style24t) : Text(deviceStep[1], style: style24f),
-          trailing: tProd != null ? Text('${tProd!.toInt()}$indicate', style: style24t) : Text('1$indicate', style: style24f),
-        ),
-        ListTile(
-          visualDensity: stWidg,
-          dense:true,
-          title: parogen != null ? Text(deviceStep[2], style: style24t) : Text(deviceStep[2], style: style24f),
-          trailing: parogen != null ? Text('Вкл.', style: style20t) : Text('Выкл.', style: style20f),
-        ),
-        ListTile(
-          visualDensity: stWidg,
-          dense:true,
-          title: compres != null ? Text(deviceStep[3], style: style24t) : Text(deviceStep[3], style: style24f),
-          trailing: compres != null ? Text('Вкл.', style: style20t) : Text('Выкл.', style: style20f),
-        ),
-        ListTile(
-          visualDensity: stWidg,
-          dense:true,
-          title: zaslon != null ? Text(deviceStep[4], style: style24t) : Text(deviceStep[4], style: style24f),
-          trailing: zaslon != null ? Text('Откр.', style: style20t) : Text('Закр.', style: style20f),
-        ),
-        const Divider(color: Colors.black26,),
-        time !=null ? Text('00:$time', style: style24t) : Text('00:00', style: style24f)
-      ] //TimerSec(DateTime.now().add(Duration(seconds: time!)))
+  Frying copyWith(
+    double? value,
+  ) {
+    return Frying(
+      value ?? this.value,
     );
   }
-
-  TimerBuilder TimerSec(DateTime alert) {
-    return TimerBuilder.scheduled([alert], builder: (context) {
-            var now = DateTime.now();
-            var reached = now.compareTo(alert) >= 0;
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  !reached
-                      ? TimerBuilder.periodic(Duration(seconds: 1),
-                          alignment: Duration.zero, builder: (context) {
-                          var now = DateTime.now();
-                          var remaining = alert.difference(now);
-                          return Text(
-                            formatDuration(remaining), style: style24t
-                          );
-                        })
-                      : Text("00:00", style: style24f,),
-                ],
-              ),
-            );
-          });
-  }
-
-  Future<dynamic> dialog(BuildContext context, String name) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Colors.amber,
-            title: Text(name),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Picker(),
-                ElevatedButton(child: Text("Select"), onPressed: () {})
-              ],
-            ),
-          );
-        });
+  
+  @override
+  Stage copyW(double? d, int? i) {
+    return copyWith(d);
   }
 }
-
-List<String> deviceStep = [
-  't камеры',
-  't продукта',
-  'Пароген',
-  'Компрессор',
-  'Заслонка',  
-];
-
-
-
