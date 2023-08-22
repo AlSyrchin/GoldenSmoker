@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import 'package:goldensmoker/getX/commandFile.dart';
 import 'package:goldensmoker/getX/getxGolden.dart';
@@ -24,6 +25,7 @@ class App extends StatelessWidget {
         GetPage(name: "/", page: () => HomePage()),
         GetPage(name: "/two", page: () => const DirectControl()),
         GetPage(name: "/three", page: () => const Correction()),
+        GetPage(name: "/newrecipe", page: () => const NewRecipe()),
       ],
     );
   }
@@ -108,14 +110,12 @@ class DirectControl extends StatelessWidget {
                 )))),
                 const SizedBox(width: defaultPadding),
                 
-                Expanded(
+                const Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                   StackContaner(name: 'Заслонка',content: SwitchControlsAir()),
-                  // const SizedBox(height: defaultPadding),
                   StackContaner(name: 'Компрессор',content: SwitchControlsSmoke()),
-                  // const SizedBox(height: defaultPadding),
                   StackContaner(name: 'Пароген',content: SwitchControlsWater()),
                   ],),
                 ),
@@ -349,6 +349,7 @@ class Correction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    RecipeController recipeController = Get.put(RecipeController());
     return Scaffold(
       backgroundColor: mainFon,
       appBar: AppBarMetod(),
@@ -361,7 +362,9 @@ class Correction extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 height: 325,
-                child: RecipeController().widgetAllStage()),
+                child: 
+                Obx(() => recipeController.widgetAllStage())
+                ),
               const SizedBox(height: defaultPadding),
   
             ],),
@@ -387,7 +390,7 @@ class Correction extends StatelessWidget {
 
   TimerBuilder Clock() {
     return TimerBuilder.periodic(Duration(seconds: 1), builder: (context) {
-            return Text("${DateTime.now().hour}:${DateTime.now().minute}:${DateTime.now().second}");
+            return Text(DateFormat('hh:mm:ss').format(DateTime.now()));
           });
   }
 }
@@ -423,3 +426,142 @@ class _PickerState extends State<Picker> {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+class NewRecipe extends StatelessWidget {
+  const NewRecipe({super.key});
+  @override
+  Widget build(BuildContext context) {
+    StateLu valueLu = Get.put(StateLu());
+    RecipeController recipeController = Get.put(RecipeController());
+    AllStateWidget allStateWidget = Get.put(AllStateWidget());
+    return Scaffold(
+      backgroundColor: mainFon,
+      appBar: appBarMetod(),
+      body: SafeArea(
+          child: Padding(
+        padding: const EdgeInsets.all(defaultPadding),
+        child: Center(
+            child: Column(
+          children: [
+            Lu(),
+            SizedBox(
+                width: 800,
+                child: ElevatedButton(
+                    onPressed: () {
+                      switch (valueLu.selectedValue.value) {
+                        case 0:
+                          recipeController.listStages.add(Related(allStateWidget.range.value));
+                          break;
+                        case 1:
+                          recipeController.listStages.add(Drying(allStateWidget.range.value, allStateWidget.range.value.toInt()));
+                          break;
+                        case 2:
+                          recipeController.listStages.add(Boiling(allStateWidget.range.value, allStateWidget.range.value.toInt()));
+                          break;
+                        case 3:
+                          recipeController.listStages.add(Smoking(allStateWidget.range.value, allStateWidget.range.value.toInt()));
+                          break;
+                        case 4:
+                          recipeController.listStages.add(Frying(allStateWidget.range.value));
+                          break;
+                        default:
+                      }
+                      Get.back();
+                    },
+                    child: const Text('Add')))
+          ],
+        )),
+      )),
+    );
+  }
+
+  AppBar appBarMetod() {
+    return AppBar(
+      backgroundColor: mainFon,
+      elevation: 0,
+      title: Center(
+          child: Text(
+        'Новое действие',
+        style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+      )),
+      actions: <Widget>[
+        IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+      ],
+    );
+  }
+}
+
+
+class StateLu extends GetxController {
+  RxInt selectedValue = 0.obs;
+
+  void upSt(int? val) {
+    selectedValue.value = val ?? selectedValue.value;
+    update();
+  }
+}
+
+class IdName {
+  final int index;
+  final String name;
+  IdName(
+    this.index,
+    this.name,
+  );
+}
+
+List<IdName> nameStep = [
+  IdName (0, 'Отепление'),
+  IdName (1, 'Сушка'),
+  IdName (2, 'Варка'),
+  IdName (3, 'Копчение'),
+  IdName (4, 'Жарка'),
+];
+
+List<DropdownMenuItem<int>> listDrop = nameStep.map((e) => DropdownMenuItem(value: e.index, child: Text(e.name),)).toList();
+
+class Lu extends StatelessWidget {
+  const Lu({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<StateLu>(
+        init: StateLu(),
+        builder: (_) => SizedBox(
+          width: 800,
+          height: 450,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              DropdownButton<int>(
+                      value: _.selectedValue.value,
+                      items: listDrop,
+                      onChanged: (int? newValue) {
+                        _.upSt(newValue);
+                      },
+                      isDense: true,
+                      isExpanded: true,
+                      padding: const EdgeInsets.all(8),
+                      borderRadius: const BorderRadius.all(Radius.circular(4)),
+                    ),
+        
+            if (_.selectedValue.value == 1) Expanded(child: StackContaner(name: 'Заслонка',content: Text('Откр.'))),
+            if (_.selectedValue.value == 3) Expanded(child: StackContaner(name: 'Компрессор',content: Text('Вкл.'))),
+            if (_.selectedValue.value == 2) Expanded(child: StackContaner(name: 'Пароген',content: Text('Вкл.'))),
+            if (_.selectedValue.value == 3 || _.selectedValue.value == 4) Expanded(flex: 2, child: StackContaner(name: 't камеры',content: SliderControl())),
+            if (_.selectedValue.value == 0 || _.selectedValue.value == 1 || _.selectedValue.value == 2) Expanded(flex: 2, child: StackContaner(name: 't продукта',content: SliderControl())),
+            if (_.selectedValue.value == 1 || _.selectedValue.value == 2 || _.selectedValue.value == 3) Expanded(flex: 2, child: StackContaner(name: 'Выдержка',content: SliderControl())),
+            ],
+          ),
+        ));
+  }
+}

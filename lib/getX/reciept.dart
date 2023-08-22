@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import 'goldenWidget.dart';
 import 'timer.dart';
@@ -20,8 +21,8 @@ abstract class Stage {
 }
 
 
-class RecipeController {
-  List<Stage> listStages = [Related(50), Drying(60, 60), Boiling(70,60), Smoking(80, 20), Smoking(10, 10)];
+class RecipeController extends GetxController{
+  RxList<Stage> listStages = <Stage>[Related(10), Drying(20, 30)].obs;
   int indexCurrentStage  = 1;
 
   Widget widgetCurrentStage() {
@@ -31,14 +32,21 @@ class RecipeController {
    Widget widgetAllStage() {
     return ListView(
       scrollDirection: Axis.horizontal,
-      children: listStages.map((e) => Container(
+      children: 
+      [
+        ...listStages.map((e) => Container(
         margin: const EdgeInsets.symmetric(horizontal: 20),
                 width: 260,
                 height: 325,
                 color: Colors.white,
                 child: e.generateWidgetInfo()
-    )
-    ).toList(),);
+        )
+      ).toList(),
+      ElevatedButton(
+        onPressed: () => Get.toNamed('newrecipe'),
+        child: const Text('New')
+        )
+      ]);
   }
 
   void nextStage(){}
