@@ -65,7 +65,7 @@ class NumberPicker extends StatefulWidget {
     this.itemCount = 3,
     this.step = 1,
     this.itemHeight = 50,
-    this.itemWidth = 100,
+    this.itemWidth = 90,
     this.axis = Axis.vertical,
     this.textStyle,
     this.selectedTextStyle,

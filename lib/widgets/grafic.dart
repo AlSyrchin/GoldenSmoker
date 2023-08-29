@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
-import 'package:intl/intl.dart';
+// import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -38,7 +38,7 @@ class _MyHomePageState extends State<_MyHomePage> {
 // Переменные
   List<LineSeries<GrData, int>>? series;
   Timer? timer;
-  ChartSeriesController? _chartSeriesController;
+  ChartSeriesController? chartSeriesController;
   static List<GrData> data1 = [
     GrData(0),
   ];
@@ -127,7 +127,7 @@ class _MyHomePageState extends State<_MyHomePage> {
     timer?.cancel();
     // data1!.clear();
     series!.clear();
-    _chartSeriesController = null;
+    chartSeriesController = null;
     super.dispose();
   }
 
@@ -198,12 +198,12 @@ class _MyHomePageState extends State<_MyHomePage> {
 
   void _updateDataSource(Timer timer) {
     setState(() {
-      data1!.add(GrData(_getRandomInt(1, 30)));
-      data2!.add(GrData(_getRandomInt(1, 50)));
-      data3!.add(GrData(_getRandomInt(2, 10)));
+      data1.add(GrData(_getRandomInt(1, 30)));
+      data2.add(GrData(_getRandomInt(1, 50)));
+      data3.add(GrData(_getRandomInt(2, 10)));
 
-      data4!.add(GrData(_getRandomInt(1, 3)));
-      data5!.add(GrData(_getRandomInt(1, 4)));
+      data4.add(GrData(_getRandomInt(1, 3)));
+      data5.add(GrData(_getRandomInt(1, 4)));
     });
   }
 }

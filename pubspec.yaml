@@ -59,6 +59,8 @@ dependencies:
   bloc: ^8.0.0
   # Get
   get: ^4.6.5
+  # Intl
+  intl: ^0.18.1
   # Тест
   equatable: ^2.0.3
   csv: ^5.0.2

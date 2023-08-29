@@ -3,7 +3,7 @@ import 'dart:math';
 
 ///Package imports
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart' hide TextDirection;
+// import 'package:intl/intl.dart' hide TextDirection;
 
 ///Chart import
 import 'package:syncfusion_flutter_charts/charts.dart' hide LabelPlacement;

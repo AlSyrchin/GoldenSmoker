@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'dart:async';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
-import 'package:path_provider/path_provider.dart' as pathProvider;
-import 'dart:io';
+// import 'package:path_provider/path_provider.dart' as pathProvider;
+// import 'dart:io';
 
 
 void main() => runApp(new ExampleApplication());
@@ -43,10 +43,10 @@ class _ChartBluState extends State<ChartBlu> {
   String _nameDev = '';
   String _addresDev = '';
   StreamSubscription<BluetoothDiscoveryResult>? _discoveryStreamSubscription;
-  bool _isDiscovering = true;
+  bool isDiscovering = true;
 
   Timer? _discoverableTimeoutTimer;
-  int _discoverableTimeoutSecondsLeft = 0;
+  int discoverableTimeoutSecondsLeft = 0;
 
   BluetoothConnection? connection;
   bool isConnecting = true;
@@ -56,7 +56,7 @@ class _ChartBluState extends State<ChartBlu> {
 TextEditingController _nameController = TextEditingController();
  final ScrollController listScrollController = new ScrollController();
 List<_Message> messages = List<_Message>.empty(growable: true);
-String _messageBuffer = '';
+// String _messageBuffer = '';
   static final clientID = 0;
 
 
@@ -65,7 +65,7 @@ double tm=0, tw=0, hs=0, ks=0, hd=0, pv=0;
 
 
 // Переменные
-  ChartSeriesController? _chartSeriesController;
+  ChartSeriesController? chartSeriesController;
   static List<double> dataTM = [0];
   static List<double> dataTW = [0];
   static List<double> dataT = [0];
@@ -188,7 +188,7 @@ var directiry, file, isExist;
       setState(() {
         _bluetoothState = state;
         _discoverableTimeoutTimer = null;
-        _discoverableTimeoutSecondsLeft = 0;
+        discoverableTimeoutSecondsLeft = 0;
       });
       print(
           '.....................................................Запустился Strim');
@@ -226,7 +226,7 @@ var directiry, file, isExist;
 // Прекращение стрима устройств
   void desconnectStrim() {
     _discoveryStreamSubscription?.onDone(() {
-      _isDiscovering = false;
+      isDiscovering = false;
     });
   }
 
@@ -358,7 +358,7 @@ print('Massege: ${listTst}');
 
     timer?.cancel();
     series!.clear();
-    _chartSeriesController = null;
+    chartSeriesController = null;
 
     super.dispose();
   }

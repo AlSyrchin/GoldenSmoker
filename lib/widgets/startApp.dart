@@ -2,7 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+// import 'package:syncfusion_flutter_charts/sparkcharts.dart';
 
 
 //Dart Analyzer// Dart Fix
@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    // Size size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: mainFon,
       body: SafeArea(

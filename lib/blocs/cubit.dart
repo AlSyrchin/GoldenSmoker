@@ -535,9 +535,9 @@ class GraphsView extends StatelessWidget {
 }
 
 class BoxCircle extends StatelessWidget {
-  String text;
-  Color color;
-  BoxCircle({
+  final String text;
+  final Color color;
+  const BoxCircle({
     Key? key,
     required this.text,
     required this.color,
@@ -562,7 +562,7 @@ class BoxCircle extends StatelessWidget {
 
 class WindowChat extends StatelessWidget {
   WindowChat({super.key});
-  TextEditingController nameController = TextEditingController();
+  final TextEditingController nameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final cubit = context.read<CubitBluetooth>();
@@ -574,7 +574,7 @@ class WindowChat extends StatelessWidget {
             Flexible(
               child: BlocBuilder<CubitBluetooth, StateBluetooth>(
                   builder: (context, state) {
-                    print('build message');
+                    // print('build message');
                 return ListView(
                     padding: const EdgeInsets.all(12.0),
                     children: state.chatList.message

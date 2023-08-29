@@ -1,17 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
-
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:get/get.dart';
-
 import 'package:goldensmoker/getX/commandFile.dart';
-// import 'package:goldensmoker/getX/goldenWidget.dart';
 
-const Color mainFon = Color.fromRGBO(31, 10, 9, 1);
-const defaultPadding = 20.0;
 
 
 class AllStateWidget extends GetxController{

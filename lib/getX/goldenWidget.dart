@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:goldensmoker/getX/commandFile.dart';
 import 'package:goldensmoker/getX/getxGolden.dart';
-import 'package:goldensmoker/getX/reciept.dart';
+// import 'package:goldensmoker/getX/reciept.dart';
+import 'constant.dart';
 import 'numberpicker.dart';
 import 'timer.dart';
 
@@ -390,7 +391,7 @@ class Correction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    RecipeController recipeController = Get.put(RecipeController());
+    // RecipeController recipeController = Get.put(RecipeController());
     BluetoothUser bluetoothController = Get.put(BluetoothUser());
     return Scaffold(
       backgroundColor: mainFon,
@@ -404,7 +405,8 @@ class Correction extends StatelessWidget {
             SizedBox(
                 width: double.infinity,
                 height: 325,
-                child: Obx(() => recipeController.widgetAllStage())),
+                // child: Obx(() => recipeController.widgetAllStage())
+                ),
             const SizedBox(height: defaultPadding),
             SizedBox(
               width: 500,
@@ -419,8 +421,7 @@ class Correction extends StatelessWidget {
                   Expanded(
                     child: ElevatedButton(
                         onPressed: () {
-                          bluetoothController
-                              .sendMessage(recipeController.sendRecipe());
+                          // bluetoothController.sendMessage(recipeController.sendRecipe());
                           bluetoothController.sendMessage(RECIPE_START);
                         },
                         child: const Text('Go')),
@@ -497,53 +498,53 @@ class NewRecipe extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StateLu valueLu = Get.put(StateLu());
-    RecipeController recipeController = Get.put(RecipeController());
+    // RecipeController recipeController = Get.put(RecipeController());
     AllStateWidget allStateWidget = Get.put(AllStateWidget());
     return Scaffold(
       backgroundColor: mainFon,
       appBar: appBarMetod(),
-      body: SafeArea(
+      body: const SafeArea(
           child: Padding(
-        padding: const EdgeInsets.all(defaultPadding),
-        child: Center(
+        padding: EdgeInsets.all(defaultPadding),
+        child:  Center(
             child: Column(
           children: [
-            const Lu(),
+            Lu(),
             SizedBox(
               width: 800,
               height: 50,
-              child: ElevatedButton(
-                onPressed: () {
-                  switch (valueLu.selectedValue.value) {
-                    case 0:
-                      recipeController.listStages
-                          .add(Related(allStateWidget.range.value));
-                      break;
-                    case 1:
-                      recipeController.listStages.add(Drying(
-                          allStateWidget.range.value,
-                          allStateWidget.range.value.toInt()));
-                      break;
-                    case 2:
-                      recipeController.listStages.add(Boiling(
-                          allStateWidget.range.value,
-                          allStateWidget.range.value.toInt()));
-                      break;
-                    case 3:
-                      recipeController.listStages.add(Smoking(
-                          allStateWidget.range.value,
-                          allStateWidget.range.value.toInt()));
-                      break;
-                    case 4:
-                      recipeController.listStages
-                          .add(Frying(allStateWidget.range.value));
-                      break;
-                    default:
-                  }
-                  Get.back();
-                },
-                child: const Text('Add'),
-              ),
+              // child: ElevatedButton(
+              //   onPressed: () {
+              //     switch (valueLu.selectedValue.value) {
+              //       case 0:
+              //         recipeController.listStages
+              //             .add(Related(allStateWidget.range.value));
+              //         break;
+              //       case 1:
+              //         recipeController.listStages.add(Drying(
+              //             allStateWidget.range.value,
+              //             allStateWidget.range.value.toInt()));
+              //         break;
+              //       case 2:
+              //         recipeController.listStages.add(Boiling(
+              //             allStateWidget.range.value,
+              //             allStateWidget.range.value.toInt()));
+              //         break;
+              //       case 3:
+              //         recipeController.listStages.add(Smoking(
+              //             allStateWidget.range.value,
+              //             allStateWidget.range.value.toInt()));
+              //         break;
+              //       case 4:
+              //         recipeController.listStages
+              //             .add(Frying(allStateWidget.range.value));
+              //         break;
+              //       default:
+              //     }
+              //     Get.back();
+              //   },
+              //   child: const Text('Add'),
+              // ),
             )
           ],
         )),
@@ -572,27 +573,10 @@ class StateLu extends GetxController {
   }
 }
 
-class IdName {
-  final int index;
-  final String name;
-  IdName(
-    this.index,
-    this.name,
-  );
-}
-
-List<IdName> nameStep = [
-  IdName(0, 'Отепление'),
-  IdName(1, 'Сушка'),
-  IdName(2, 'Варка'),
-  IdName(3, 'Копчение'),
-  IdName(4, 'Жарка'),
-];
-
-List<DropdownMenuItem<int>> listDrop = nameStep
-    .map((e) => DropdownMenuItem(
+List<DropdownMenuEntry<int>> listDrop = nameStep
+    .map((e) => DropdownMenuEntry(
           value: e.index,
-          child: Text(e.name),
+          label: e.name,
         ))
     .toList();
 
@@ -610,20 +594,17 @@ class Lu extends StatelessWidget {
           children: [
             SizedBox(
               height: 70,
-              child: StackContaner(
-                name: "Этап",
-                content: DropdownButton<int>(
-                  value: _.selectedValue.value,
-                  items: listDrop,
-                  onChanged: (int? newValue) {
+              child: DropdownMenu<int>(
+                  initialSelection: _.selectedValue.value,
+                  dropdownMenuEntries: listDrop,
+                  onSelected: (int? newValue) {
                     _.upSt(newValue);
                   },
-                  isDense: true,
-                  isExpanded: true,
-                  padding: const EdgeInsets.all(8),
-                  borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  // isDense: true,
+                  // isExpanded: true,
+                  // padding: const EdgeInsets.all(8),
+                  // borderRadius: const BorderRadius.all(Radius.circular(4)),
                 ),
-              ),
             ),
             if (_.selectedValue.value == 1)
               const SizedBox(
