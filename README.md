@@ -14,3 +14,5 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+Папка ApiTest: Приложение для отеля по макету sigma (https://www.figma.com/file/b6d2wBgwoyDMZeO5AnluD4/Flutter?node-id=0%3A1&mode=dev)
