@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'commandFile.dart';
-import 'recieptsStep.dart';
+// import 'recieptsStep.dart';
 
 
 class StateStage extends GetxController{
@@ -11,28 +11,28 @@ class StateStage extends GetxController{
 
   void addRelated(double p, double b, int t){
     stage.add(Related(b, p));
-    update();
+    refresh();
   }
     void addDrying(double p, double b, int t){
     stage.add(Drying(b, p, t));
-    update();
+    refresh();
   }
   void addBoiling(double p, double b, int t) {
     stage.add(Boiling(b, p, t));
-    update();
+    refresh();
   }
     void addSmoking(double p, double b, int t){
     stage.add(Smoking(b, p, t));
-    update();
+    refresh();
   }
     void addFrying(double p, double b, int t){
     stage.add(Frying(b, p));
-    update();
+    refresh();
   }
   
   void removeIndex(int index) {
     if (stage.isNotEmpty) stage.removeAt(index);
-    update();
+    refresh();
   }
 
   void editIndex(int index, double? p, double? b, int? t) {
