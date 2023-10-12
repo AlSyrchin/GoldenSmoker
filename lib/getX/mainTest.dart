@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'constant.dart';
 import 'recipeClass.dart';
@@ -10,6 +11,7 @@ class App extends StatelessWidget {
   const App({super.key});
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     return GetMaterialApp(
       theme: ThemeData.dark(),
       home: const HomePage(),
@@ -19,6 +21,8 @@ class App extends StatelessWidget {
     );
   }
 }
+
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -76,3 +80,5 @@ class HomePage extends StatelessWidget {
     );
   }
 }
+
+
