@@ -21,14 +21,17 @@ class PageSeven extends StatelessWidget {
           TitleBlocWidget('Готовим', recipe.name),
           TitleBlocWidget('Продолдительность', getTimeString(recipe.calculateRecipe())),
           TitleBlocWidget('Время', DateFormat('hh:mm:ss').format(DateTime.now())),
+          const SizedBox(width: 200)
           ],
         ),
-        leading: BackButton(
-          onPressed: () {
+        leading: IconButton(
+          onPressed: (){
             context.read<CubitSeven>().btnBack();
             Navigator.of(context).pop();
-          },
+        }, 
+        icon: const Icon(Icons.close, color: Colors.red,)
         ),
+
         actions: [
           IconButton(
               onPressed: () => context.read<CubitSeven>().toggleLamp(),
@@ -90,7 +93,7 @@ class SliderWidget extends StatelessWidget {
                       borderRadius: BorderRadius.all(Radius.circular(16))),
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOutCubic,
-                  margin: const EdgeInsets.all(10),
+                  margin: (state.activePage == index) ? const EdgeInsets.all(00) : const EdgeInsets.all(10),
                   child: Column(
                     children: [
                       Container(
@@ -134,10 +137,8 @@ class SliderWidget extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  Text('${listStages[index].tempB}$indicate',
-                                      style: t34w500a),
-                                  Text('${listStages[index].tempP}$indicate',
-                                      style: t34w500a),
+                                  Text('${listStages[index].tempB}$indicate', style: t34w500a),
+                                  Text('${listStages[index].tempP}$indicate', style: t34w500a),
                                 ],
                               ),
                               Container(

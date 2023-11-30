@@ -5,13 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'constant.dart';
 import 'cubit_free.dart';
 import 'cubit_two.dart';
+import 'stage.dart';
 import 'state_free.dart';
 import 'state_two.dart';
 import 'widgets.dart';
 
 class PageTwo extends StatelessWidget {
-  const PageTwo({super.key});
-
+  const PageTwo(this.stage, {super.key});
+  final List<Stage> stage;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -7,7 +7,7 @@ import 'stage.dart';
   String getTimeString(int value) {
     final int hour = value ~/ 60;
     final int minutes = value % 60;
-    return '00:${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")}';
+    return '0:${hour.toString().padLeft(2, "0")}:${minutes.toString().padLeft(2, "0")}';
 }
 
 class TimeWidgetConvert extends StatelessWidget {

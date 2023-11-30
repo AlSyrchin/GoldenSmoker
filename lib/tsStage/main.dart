@@ -33,8 +33,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<CubitEigth>(create: (context) => CubitEigth(cubitBluetooth))
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Bloc Example',
-        theme: ThemeData.dark(),
+        theme: ThemeData.dark(
+          // platform: TargetPlatform.iOS // переход на ios 
+        ),
         home: const PageFour(),
       ),
     );

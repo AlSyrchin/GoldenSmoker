@@ -87,7 +87,7 @@ class ReorderableListWidget extends StatelessWidget {
             ),
             onReorder: (oldIndex, newIndex) => {context.read<CubitOne>().fromTo(oldIndex, newIndex)},
             footer: InkWell(
-              onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => const PageTwo()))},
+              onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => PageTwo(stage)))},
               child: Container(
                   margin: EdgeInsets.only(
                       left: 70,

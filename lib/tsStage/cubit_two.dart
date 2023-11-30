@@ -25,11 +25,11 @@ class CubitTwo extends Cubit<StateTwo> {
 
   void toggleButton(int isWho, bool b) {
     switch(isWho){
-      case 0: b == true ? emit(state.copyWith(extractor: true)) : emit(state.copyWith(extractor: false));
-      case 1: b == true ? emit(state.copyWith(smoke: true)) : emit(state.copyWith(smoke: false));
-      case 2: b == true ? emit(state.copyWith(water: true)) : emit(state.copyWith(water: false));
-      case 3: b == true ? emit(state.copyWith(flap: true)) : emit(state.copyWith(flap: false));
-      case 4: b == true ? emit(state.copyWith(tens: true)) : emit(state.copyWith(tens: false));
+      case 0: emit(state.copyWith(extractor: b));
+      case 1: emit(state.copyWith(smoke: b));
+      case 2: emit(state.copyWith(water: b));
+      case 3: emit(state.copyWith(flap: b));
+      case 4: emit(state.copyWith(tens: b));
       default:
     }
   }
