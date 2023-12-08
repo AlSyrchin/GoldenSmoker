@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'state_two_copy.dart';
 import 'constant.dart';
+import 'cubit_eigth.dart';
 import 'cubit_free.dart';
-import 'cubit_two.dart';
+import 'cubit_two_copy.dart';
 import 'stage.dart';
 import 'state_free.dart';
-import 'state_two.dart';
 import 'widgets.dart';
 
-class PageTwo extends StatelessWidget {
-  const PageTwo(this.stage, {super.key});
+class PageTwoCopy extends StatelessWidget {
+  const PageTwoCopy(this.stage, {super.key});
   final List<Stage> stage;
   @override
   Widget build(BuildContext context) {
@@ -22,77 +22,70 @@ class PageTwo extends StatelessWidget {
         backgroundColor: mainFon,
       ),
       backgroundColor: mainFon,
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: BlocProvider(create: (context) => CubitFree(),
-          child: BlocBuilder<CubitFree,StateFree>(builder: (context, state) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              
-              const ButtonListWidget(),
-              const SizedBox(height: 16*2),
-
-              state.btnList[1] ? const ToggleButtonsWidget('Заслонка') : Container(),
-              state.btnList[2] ? const ToggleButtonsWidget('Пароген')  : Container(),
-              state.btnList[3] ? const ToggleButtonsWidget('Компрессор') : Container(),
-
-              state.btnList[5] ? TextControlWidget(true): Container(),
-              const SizedBox(height: 16),
-
-              state.btnList[0] || state.btnList[4] ? Container() : TextControlWidget(false),
-              const SizedBox(height: 16),
-        
-              const SliderWidget(true), 
-              const SizedBox(height: 16),
-        
-              const SliderWidget(false), 
-              const SizedBox(height: 16),
-
-              state.btnList[5] ? const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SwitchWidget(0),
-                  SizedBox(width: 16),
-                  SwitchWidget(1),
-                  SizedBox(width: 16),
-                  SwitchWidget(2),
-                  SizedBox(width: 16),
-                  SwitchWidget(3),
-                  SizedBox(width: 16),
-                  SwitchWidget(4),
-                ],
-              ) : Container(),
-              
-              const Divider(),
-              const SizedBox(height: 12),
-              ButtonAddWidgwet(state.btnList),
-
-            ],
-          ),),),
+      body:  BlocProvider(
+        create: (context) => CubitTwoCopy(),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: BlocProvider(create: (context) => CubitFree(),
+            child: BlocBuilder<CubitFree,StateFree>(builder: (context, state) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                
+                const ButtonListWidget(),
+                const SizedBox(height: 16*2),
+      
+                state.btnList[1] ? const ToggleButtonsWidget('Заслонка') : Container(),
+                state.btnList[2] ? const ToggleButtonsWidget('Пароген')  : Container(),
+                state.btnList[3] ? const ToggleButtonsWidget('Компрессор') : Container(),
+      
+                state.btnList[5] ? TextControlWidget(true): Container(),
+                const SizedBox(height: 16),
+      
+                state.btnList[0] || state.btnList[4] ? Container() : TextControlWidget(false),
+                const SizedBox(height: 16),
+          
+                const SliderWidget(true), 
+                const SizedBox(height: 16),
+          
+                const SliderWidget(false), 
+                const SizedBox(height: 16),
+      
+                state.btnList[5] ? const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SwitchWidget(0),
+                    SizedBox(width: 16),
+                    SwitchWidget(1),
+                    SizedBox(width: 16),
+                    SwitchWidget(2),
+                    SizedBox(width: 16),
+                    SwitchWidget(3),
+                    SizedBox(width: 16),
+                    SwitchWidget(4),
+                  ],
+                ) : Container(),
+                
+                const Divider(),
+                const SizedBox(height: 12),
+                SizedBox(
+                  width: w(context, 320),
+                  height: h(context, 128),
+                  child: InkWell(
+                    onTap: (){
+                      context.read<CubitTwoCopy>().addItem(stage, state.btnList);
+                      context.read<CubitTwoCopy>().restart();
+                      context.read<CubitEigth>().restart();
+                      Navigator.pop(context);
+                    },
+                    child: const ContanerRadius(Colors.amber, 16, text: 'Добавить', textSize: 1)),
+                ),
+      
+              ],
+            ),),),
+          ),
         ),
       ),
-    );
-  }
-}
-
-class ButtonAddWidgwet extends StatelessWidget {
-  const ButtonAddWidgwet(this.list, {super.key});
-
-  final List<bool> list;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: w(context, 320),
-      height: h(context, 128),
-      child: InkWell(
-        onTap: (){
-          context.read<CubitTwo>().addItem(list);
-          context.read<CubitTwo>().restart();
-          Navigator.pop(context);
-        },
-        child: const ContanerRadius(Colors.amber, 16, text: 'Добавить', textSize: 1)),
     );
   }
 }
@@ -136,10 +129,10 @@ class SwitchWidget extends StatelessWidget {
     return Row(children: [
       Text('${listName[isWho]}: '),
       const SizedBox(width: 16),
-      BlocBuilder<CubitTwo, StateTwo>(
+      BlocBuilder<CubitTwoCopy, StateTwoCopy>(
         builder: (context, state) => Switch(
               value: isWho == 0 ? state.extractor : isWho == 1 ? state.smoke : isWho == 2 ? state.water : isWho == 3 ? state.flap : state.tens,
-              onChanged: (value) => context.read<CubitTwo>().toggleButton(isWho, value),
+              onChanged: (value) => context.read<CubitTwoCopy>().toggleButton(isWho, value),
               activeTrackColor: Colors.amberAccent,
               activeColor: Colors.amber,
             ))
@@ -182,11 +175,11 @@ class TextControlWidget extends StatelessWidget {
   final TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CubitTwo, StateTwo>(builder: (context, state) => TextFormField(
-      controller: _textEditingController,
+    return BlocBuilder<CubitTwoCopy, StateTwoCopy>(builder: (context, state) => TextFormField(
+      controller: _textEditingController,//TextEditingController(text: isWho ? state.name : state.time.toString()),
       style: const TextStyle(color: Colors.white),
       keyboardType: isWho ? TextInputType.name : TextInputType.number,
-      onChanged: (value) => isWho ? context.read<CubitTwo>().addName(value) : context.read<CubitTwo>().addTime(value),
+      onChanged: (value) => isWho ? context.read<CubitTwoCopy>().addName(value) : context.read<CubitTwoCopy>().addTime(value),
       decoration: InputDecoration(
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 13, horizontal: 24),
@@ -209,11 +202,11 @@ class TextControlWidgetT extends StatelessWidget {
   final TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CubitTwo, StateTwo>(builder: (context, state) => TextFormField(
+    return BlocBuilder<CubitTwoCopy, StateTwoCopy>(builder: (context, state) => TextFormField(
       controller: _textEditingController,
       style: const TextStyle(color: Colors.white),
       keyboardType: isWho ? TextInputType.name : TextInputType.number,
-      onChanged: (value) => isWho ? context.read<CubitTwo>().addName(value) : context.read<CubitTwo>().addTime(value),
+      onChanged: (value) => isWho ? context.read<CubitTwoCopy>().addName(value) : context.read<CubitTwoCopy>().addTime(value),
       decoration: InputDecoration(
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 13, horizontal: 24),
@@ -242,7 +235,7 @@ class SliderWidget extends StatelessWidget {
         const SizedBox(width: 20),
         SizedBox(
           width: 800,
-          child: BlocBuilder<CubitTwo, StateTwo>(builder: (context, state) => SliderTheme(
+          child: BlocBuilder<CubitTwoCopy, StateTwoCopy>(builder: (context, state) => SliderTheme(
                           data: SliderThemeData(
                             trackHeight: 16 * 0.5,
                             thumbShape: SliderThemeRectangle(0.5),
@@ -257,8 +250,8 @@ class SliderWidget extends StatelessWidget {
                               max: 100.0,
                               value: isWho ? state.tbox : state.tprod,
                               onChanged: (value) {
-                                if (isWho) {context.read<CubitTwo>().addTbox(value.roundToDouble());}
-                                else {context.read<CubitTwo>().addTprod(value.roundToDouble());}
+                                if (isWho) {context.read<CubitTwoCopy>().addTbox(value.roundToDouble());}
+                                else {context.read<CubitTwoCopy>().addTprod(value.roundToDouble());}
                               },
                             ),
                         ),),

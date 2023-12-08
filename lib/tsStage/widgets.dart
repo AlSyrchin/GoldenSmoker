@@ -82,20 +82,23 @@ class IndicateWidget extends StatelessWidget {
 }
 
 class ContanerRadius extends StatelessWidget {
-  const ContanerRadius(this.color, this.text, this.size, {super.key});
+  const ContanerRadius(this.color, this.radius, {this.text, this.child, this.textSize, super.key});
   final Color color;
-  final String text;
-  final double size;
+  final String? text;
+  final double radius;
+  final double? textSize;
+  final Widget? child;
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: w(context, 320 * size),
-      height: h(context, 320 * 0.4 * size),
-      decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.all(Radius.circular(16 * size))),
-      child: Center(
-          child: Text(text, style: TextStyle(color: mainFon, fontSize: h(context, 48 * size)), textAlign: TextAlign.center,)),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(radius),
+      child: Container(
+        // width: w(context, 320 * width),
+        // height: h(context, 320 * height),
+        color: color,
+        // decoration: BoxDecoration(color: color, borderRadius: BorderRadius.all(Radius.circular(16 * width))),
+        child: child ?? Center(child: Text(text!, style: TextStyle(color: mainFon, fontSize: h(context, 48 * textSize!)), textAlign: TextAlign.center,))
+      ),
     );
   }
 }

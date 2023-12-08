@@ -9,7 +9,10 @@ class StateFive {
   final List<bool> btnTens;
   final bool tboxUp;
   final bool tprodUp;
-  StateFive({
+  final bool lamp;
+  final bool isWater;
+
+    StateFive({
     this.temperature = 0,
     this.tbox = 0.0,
     this.tprod = 0.0,
@@ -20,6 +23,8 @@ class StateFive {
     this.btnTens = const [true,false],
     this.tboxUp = false,
     this.tprodUp = false,
+    this.lamp = false,
+    this.isWater = false,
   });
 
   StateFive copyWith({
@@ -33,6 +38,8 @@ class StateFive {
     List<bool>? btnTens,
     bool? tboxUp,
     bool? tprodUp,
+    bool? lamp,
+    bool? isWater,
   }) {
     return StateFive(
       temperature: temperature ?? this.temperature,
@@ -45,6 +52,8 @@ class StateFive {
       btnTens: btnTens ?? this.btnTens,
       tboxUp: tboxUp ?? this.tboxUp,
       tprodUp: tprodUp ?? this.tprodUp,
+      lamp: lamp ?? this.lamp,
+      isWater: isWater ?? this.isWater,
     );
   }
 }

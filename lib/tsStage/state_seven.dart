@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+// import 'package:flutter/material.dart';
 
 class StateSeven {
   final int activePage;
@@ -6,13 +6,15 @@ class StateSeven {
   final double tprod;
   final int time;
   final bool lamp;
-  PageController pageController = PageController(viewportFraction: 0.6);
+  final int cookingPage;
+
   StateSeven({
     this.activePage = 0,
     this.tbox = 0,
     this.tprod = 0,
     this.time = 0,
     this.lamp = false,
+    this.cookingPage = 0,
   });
 
   StateSeven copyWith({
@@ -20,7 +22,8 @@ class StateSeven {
     double? tbox,
     double? tprod,
     int? time,
-    bool? lamp
+    bool? lamp,
+    int? cookingPage,
   }) {
     return StateSeven(
       activePage: activePage ?? this.activePage,
@@ -28,6 +31,7 @@ class StateSeven {
       tprod: tprod ?? this.tprod,
       time: time ?? this.time,
       lamp: lamp ?? this.lamp,
+      cookingPage: cookingPage ?? this.cookingPage,
     );
   }
 }

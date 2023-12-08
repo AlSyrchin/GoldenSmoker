@@ -7,6 +7,7 @@ import 'cubit_bluetooth.dart';
 import 'cubit_five.dart';
 import 'cubit_seven.dart';
 import 'cubit_six.dart';
+import 'cubit_time.dart';
 import 'page_four.dart';
 import 'cubit_one.dart';
 import 'cubit_two.dart';
@@ -30,7 +31,8 @@ class MyApp extends StatelessWidget {
         BlocProvider<CubitChat>(create: (context) => cubitChat),
         BlocProvider<CubitFive>(create: (context) => CubitFive(cubitChat, cubitBluetooth)),
         BlocProvider<CubitSeven>(create: (context) => CubitSeven(cubitBluetooth)),
-        BlocProvider<CubitEigth>(create: (context) => CubitEigth(cubitBluetooth))
+        BlocProvider<CubitEigth>(create: (context) => CubitEigth(cubitBluetooth)),
+        BlocProvider<CubitTime>(create: (context) => CubitTime(),)
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

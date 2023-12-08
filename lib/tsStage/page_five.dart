@@ -17,6 +17,14 @@ class PageFive extends StatelessWidget {
         title: const Text('Прямое управление'),
         centerTitle: true,
         backgroundColor: mainFon,
+        actions: [
+          BlocBuilder<CubitFive, StateFive>(builder: (context, state) => Icon(Icons.water, size: 30, color: state.isWater ? Colors.amber : Colors.white,)) ,
+          IconButton(
+              onPressed: () => context.read<CubitFive>().toggleLamp(),
+              icon: BlocBuilder<CubitFive, StateFive>(builder: (context, state) => Icon(
+                Icons.light_mode_sharp, size: 30, color: state.lamp ? Colors.amber : Colors.white)
+                ,))
+        ],
       ),
       backgroundColor: mainFon,
       body: Container(
@@ -76,19 +84,45 @@ class TextAndArrowWidget extends StatelessWidget {
 class ButtonValue extends StatelessWidget {
   const ButtonValue(this.isWho, {super.key});
   final int isWho;
+
+  String toNameBtn(int isWho){
+    String res;
+    switch (isWho) {
+        case 0: res = 'Заслонка';break;
+        case 1: res = 'Дымоген';break;
+        case 2: res = 'Пароген';break;
+        case 3: res = 'Вытяжка';break;
+        case 4: res = 'Тен';break;
+        default: res = 'None';
+      }
+    return res;
+  }
+
+  IconData toIconBtn(int isWho){
+    IconData res;
+    switch (isWho) {
+        case 0: res = Icons.extension;break;
+        case 1: res = Icons.smoking_rooms_rounded;break;
+        case 2: res = Icons.opacity;break;
+        case 3: res = Icons.leak_add;break;
+        case 4: res = Icons.texture_rounded;break;
+        default: res = Icons.back_hand;
+      }
+    return res;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Row(
       children: [
-        isWho == 0 ? const Text('Вытяжка',): isWho == 1 ? const Text('Дымоген') : isWho == 2 ? const Text('Пароген') : isWho == 3 ? const Text('Заслонка') : const Text('Тен'),
-        const SizedBox(height: 16),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Icon(toIconBtn(isWho), size: 52, color: white02),
+        const SizedBox(width: 24),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            isWho == 0 ? Icon(Icons.leak_add, size: 50, color: white02) : isWho == 1 ? Icon(Icons.smoking_rooms_rounded, size: 50, color: white02) : isWho == 2 ? Icon(Icons.opacity, size: 50, color: white02) : isWho == 3 ? Icon(Icons.extension, size: 50, color: white02) : Icon(Icons.texture_rounded, size: 50, color: white02),
-        const SizedBox(width: 20),
-            BlocBuilder<CubitFive, StateFive>(builder: (context, state) => ToggleButtons(
+            Text(toNameBtn(isWho), style: const TextStyle(fontSize: 20)),
+            const SizedBox(height: 10),
+             BlocBuilder<CubitFive, StateFive>(builder: (context, state) => ToggleButtons(
                         direction: Axis.horizontal,
                         onPressed: (int index) => context.read<CubitFive>().nextBtn(index, isWho),
                         borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -106,9 +140,13 @@ class ButtonValue extends StatelessWidget {
                         ),
                         ),
           ],
-        ),
+        )
       ],
     );
+    
+    
+    
+
   }
 }
 

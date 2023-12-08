@@ -99,8 +99,7 @@ class GridWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GridView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 20),
-        gridDelegate:
-            const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, mainAxisSpacing: 5, crossAxisSpacing: 5, childAspectRatio: 0.85),
         itemCount: listRecipe.length,
         itemBuilder: (context, index) => InkWell(
               // onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => PageSeven(listRecipe[index]))),
@@ -109,8 +108,8 @@ class GridWidget extends StatelessWidget {
                 children: [
                   Container(
                     padding: const EdgeInsets.all(10),
-                    width: 200,
-                    height: 180,
+                    width: 240,
+                    height: 220,
                     child: Image.asset(listRecipe[index].image,
                         fit: BoxFit.contain,
                         color: Colors.amber,

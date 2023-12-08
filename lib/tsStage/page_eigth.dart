@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:goldensmoker/tsStage/cubit_eigth.dart';
+import 'package:goldensmoker/tsStage/page_two_copy.dart';
 import 'package:goldensmoker/tsStage/state_eigth.dart';
 import 'constant.dart';
-// import 'page_one.dart';
 import 'page_seven.dart';
-import 'page_two.dart';
 import 'stage.dart';
 import 'widgets.dart';
 
@@ -17,25 +16,44 @@ class PageEigth extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: Text('Коррекция рецепта\n${recipe.name}', textAlign: TextAlign.center,),
-          centerTitle: true,
-          backgroundColor: mainFon,
-          actions: [
-            BlocBuilder<CubitEigth, StateEigth>(builder: (context, state) => IconButton(onPressed: (){context.read<CubitEigth>().toggleBtn();}, icon: Icon(Icons.settings, color: state.isSettings ? Colors.amber : Colors.white, size: 40,))),
-            IconButton(onPressed: (){
-              context.read<CubitEigth>().start(recipe);
-              Navigator.push(context,MaterialPageRoute(builder: (context) => PageSeven(recipe)));
-              }, 
-              icon: const Icon(Icons.not_started_outlined, color: Colors.amber, size: 40,)),
-          ],
-        ),
+      appBar: AppBar(
+        title: Text('Коррекция рецепта\n${recipe.name}', textAlign: TextAlign.center),
+        centerTitle: true,
         backgroundColor: mainFon,
-        body: BlocBuilder<CubitEigth, StateEigth>(
-          builder: (context, state) {
-            return ReorderableListWidget(recipe.stages, state.isSettings);
-          },
-        ));
+        actions: [
+          const ButtonSettingsWidget(),
+          ButtonStartWidget(recipe: recipe),
+        ],
+      ),
+      backgroundColor: mainFon,
+      body: BlocBuilder<CubitEigth, StateEigth>(
+        builder: (context, state) => ReorderableListWidget(recipe.stages, state.isSettings),
+      ),
+    );
+  }
+}
+
+class ButtonStartWidget extends StatelessWidget {
+  const ButtonStartWidget({super.key, required this.recipe});
+
+  final Recipe recipe;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(onPressed: (){
+      context.read<CubitEigth>().start(recipe);
+      Navigator.push(context,MaterialPageRoute(builder: (context) => PageSeven(recipe)));
+      }, 
+      icon: const Icon(Icons.not_started_outlined, color: Colors.amber, size: 40));
+  }
+}
+
+class ButtonSettingsWidget extends StatelessWidget {
+  const ButtonSettingsWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CubitEigth, StateEigth>(builder: (context, state) => IconButton(onPressed: (){context.read<CubitEigth>().toggleBtn();}, icon: Icon(Icons.settings, color: state.isSettings ? Colors.amber : Colors.white, size: 40,)));
   }
 }
 
@@ -52,20 +70,9 @@ class ReorderableListWidget extends StatelessWidget {
         SizedBox(
             height: h(context, 800),
             child: ReorderableListView.builder(
-              header: stage.isNotEmpty ? const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 80),
-                child:  Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  Expanded(flex: 2,child: Text('')),
-                  Expanded(child: Text('t камеры', textAlign: TextAlign.center)),
-                  Expanded(child: Text('t продукта', textAlign: TextAlign.center)),
-                  Expanded(flex: 2, child: Text('время этапа', textAlign: TextAlign.center)),
-                  Expanded(flex: 2, child: Text('')),              
-                ],),
-              ) : Container(),
+              header: stage.isNotEmpty ? const HeaderTitleWidget() : Container(),
             buildDefaultDragHandles: false,
-            padding: EdgeInsets.symmetric(horizontal: w(context, 135)),
+            padding: EdgeInsets.symmetric(horizontal: w(context, isReorder ? 130 : 100)),
             itemCount: stage.length,
             itemBuilder: (context, index) => ListTile(
               horizontalTitleGap: 8,
@@ -101,7 +108,7 @@ class ReorderableListWidget extends StatelessWidget {
             onReorder: (oldIndex, newIndex) => {context.read<CubitEigth>().fromTo(stage, oldIndex, newIndex)},
             footer: isReorder
             ? InkWell(
-              onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => PageTwo(stage)))},
+              onTap: () => {Navigator.push(context, MaterialPageRoute(builder: (context) => PageTwoCopy(stage)))},
               child: Container(
                   margin: EdgeInsets.only(
                       left: 70,
@@ -121,6 +128,28 @@ class ReorderableListWidget extends StatelessWidget {
         // isReorder ? const Divider() : Container(),
         // isReorder ? const BtnSaveWidget() : Container(child: Text(''),)
       ],
+    );
+  }
+}
+
+class HeaderTitleWidget extends StatelessWidget {
+  const HeaderTitleWidget({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.only(left: 80, right: 80, bottom: 12),
+      child:  Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        Expanded(flex: 2,child: Text('')),
+        Expanded(child: Text('t камеры', textAlign: TextAlign.center)),
+        Expanded(child: Text('t продукта', textAlign: TextAlign.center)),
+        Expanded(flex: 2, child: Text('время этапа', textAlign: TextAlign.center)),
+        Expanded(flex: 2, child: Text('')),              
+      ],),
     );
   }
 }

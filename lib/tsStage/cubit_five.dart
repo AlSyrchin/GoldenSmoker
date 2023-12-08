@@ -10,24 +10,18 @@ class CubitFive extends Cubit<StateFive> {
   bool tprodUp = false;
 
   CubitFive(this.cubitChat, this.cubitBluetooth) : super(StateFive()){
-    emit(state.copyWith(temperature: cubitChat.state.tb, tbox: cubitChat.state.tb, tprod: cubitChat.state.tp, btnSmoke: [!cubitChat.state.s, cubitChat.state.s], btnWater: [!cubitChat.state.w, cubitChat.state.w], btnExtractor: [!cubitChat.state.a, cubitChat.state.a]));
+    emit(state.copyWith(temperature: 0, tbox: cubitChat.state.tb, tprod: cubitChat.state.tp, btnSmoke: [!cubitChat.state.s, cubitChat.state.s], btnWater: [!cubitChat.state.w, cubitChat.state.w], btnExtractor: [!cubitChat.state.a, cubitChat.state.a]));
   
     cubitChat.stream.listen((event) {}).onData((data) {
       if (state.tbox > data.tb) {tboxUp = false;} else {tboxUp = true;}
       if (state.tprod > data.tp) {tprodUp = false;} else {tprodUp = true;}
-      emit(state.copyWith(tbox: data.tb, tprod: data.tp, tboxUp: tboxUp, tprodUp: tprodUp));
+      emit(state.copyWith(tbox: data.tb, tprod: data.tp, tboxUp: tboxUp, tprodUp: tprodUp, lamp: data.lamp, isWater: data.isWater));
     });
   }
 
   void nextBtn(int index, int isWho) {
     List<bool> newList = [];
-
-    if (index == 0) {
-      newList = [true,false];
-    } else {
-      newList = [false,true];
-    }
-
+    (index == 0) ? newList = [true,false] : newList = [false,true];
     switch (isWho){
       case 0: emit(state.copyWith(btnExtractor: newList));
       case 1: emit(state.copyWith(btnSmoke: newList));
@@ -51,10 +45,17 @@ class CubitFive extends Cubit<StateFive> {
     if (state.btnExtractor.last) msgSwitched += 'A';
     if (state.btnSmoke.last) msgSwitched += 'S';
     if (state.btnWater.last) msgSwitched += 'W';
+    // if (state.btnFlap.last) msgSwitched += '?';
     if (state.temperature != 0) msgRange = 'MB${state.temperature.round() * 10}';
     if (msgRange !='' && msgSwitched != '') end = '~';
     message = 'RM>$msgRange$end$msgSwitched';
 
+    cubitBluetooth.sendMessage(message);
+  }
+
+    void toggleLamp() {
+    String message;
+    if (state.lamp) {message = 'L-';} else {message = 'L+';} 
     cubitBluetooth.sendMessage(message);
   }
 }

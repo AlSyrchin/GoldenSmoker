@@ -7,8 +7,8 @@ class CubitSeven extends Cubit<StateSeven> {
   final CubitBluetooth cubitBluetooth;
   CubitSeven(this.cubitBluetooth) : super(StateSeven()){
     cubitBluetooth.otherCubitChat.stream.listen((event) {}).onData((data) {
-      emit(state.copyWith(tbox: data.tb, tprod: data.tp, activePage: data.whisEtap, time: data.timeNow, lamp: data.lamp));
-      if (state.activePage < data.whisEtap) state.pageController.jumpToPage(data.whisEtap);
+      emit(state.copyWith(tbox: data.tb, tprod: data.tp, time: data.timeNow, lamp: data.lamp, cookingPage: data.whisEtap));
+      // if (state.activePage < data.whisEtap) state.pageController.jumpToPage(data.whisEtap);
       // nextPage(curve: Curves.easeIn, duration: Duration(milliseconds: 400)); 
     });
   }
@@ -19,8 +19,14 @@ class CubitSeven extends Cubit<StateSeven> {
 
   void btnBack() {
     cubitBluetooth.sendMessage('RS_R!');
-    state.pageController.jumpToPage(0);
+    // state.pageController.jumpToPage(0);
     emit(state.copyWith(activePage: 0));
+  }
+
+    void btnNext(int i) {
+    // cubitBluetooth.sendMessage('RS_R!');
+    // state.pageController.jumpToPage(0);
+    emit(state.copyWith(activePage: i));
   }
 
   // void stop() {

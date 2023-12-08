@@ -11,6 +11,10 @@ class CubitEigth extends Cubit<StateEigth> {
     emit(state.copyWith(isSettings: !state.isSettings));
   }
 
+    void restart() {
+    emit(state.copyWith());
+  }
+
   void delet(List<Stage> stage, int index) {
     if (stage.isEmpty) return;
     stage.removeAt(index);
@@ -18,9 +22,7 @@ class CubitEigth extends Cubit<StateEigth> {
   }
 
   void fromTo(List<Stage> stage, int oldIndex, int newIndex) {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
+    if (oldIndex < newIndex) {newIndex -= 1;}
     final element = stage.removeAt(oldIndex);
     stage.insert(newIndex, element);
     emit(state.copyWith());
@@ -28,9 +30,7 @@ class CubitEigth extends Cubit<StateEigth> {
 
     void start(Recipe recipe) {
     String newCom = 'RA_R!';
-    for (var stage in recipe.stages) {
-      newCom = '${newCom}_${stage.command}';
-    }
+    for (var stage in recipe.stages) {newCom = '${newCom}_${stage.command}';}
     newCom = '${newCom}_RC';
     cubitBluetooth.sendMessage(newCom);
   }

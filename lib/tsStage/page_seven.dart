@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:goldensmoker/tsStage/cubit_time.dart';
 import 'package:goldensmoker/tsStage/page_five.dart';
-import 'package:intl/intl.dart';
 import 'cubit_seven.dart';
 import 'state_seven.dart';
 import 'constant.dart';
@@ -20,8 +20,8 @@ class PageSeven extends StatelessWidget {
           children: [
           TitleBlocWidget('Готовим', recipe.name),
           TitleBlocWidget('Продолдительность', getTimeString(recipe.calculateRecipe())),
-          TitleBlocWidget('Время', DateFormat('hh:mm:ss').format(DateTime.now())),
-          const SizedBox(width: 200)
+          BlocBuilder<CubitTime, String>(builder: (context, state) => TitleBlocWidget('Время', state),),
+          const SizedBox(width: 180)
           ],
         ),
         leading: IconButton(
@@ -42,7 +42,10 @@ class PageSeven extends StatelessWidget {
         backgroundColor: mainFon,
       ),
       backgroundColor: mainFon,
-      body: SliderWidget(recipe.stages),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: SliderWidget(recipe.stages),
+      ),
     );
   }
 }
@@ -70,119 +73,154 @@ class SliderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PageController pageController = PageController(viewportFraction: 0.65);
     return BlocBuilder<CubitSeven, StateSeven>(
       builder: (context, state) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 420,
+            height: 450,
             width: double.maxFinite,
             child: PageView.builder(
-              controller: state.pageController,
-              // onPageChanged: (value) {},
-              // pageSnapping: true,
+              controller: pageController,
+              onPageChanged: (value) {context.read<CubitSeven>().btnNext(value);},
               itemCount: listStages.length,
-              itemBuilder: (context, index) => Opacity(
-                opacity: (state.activePage == index) ? 1 : 0.75,
+              itemBuilder: (context, index) => FittedBox(
                 child: AnimatedContainer(
                   width: 538,
-                  height: 385,
-                  padding: const EdgeInsets.only(bottom: 20),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                  decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(16))),
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOutCubic,
-                  margin: (state.activePage == index) ? const EdgeInsets.all(00) : const EdgeInsets.all(10),
-                  child: Column(
-                    children: [
-                      Container(
-                        width: double.maxFinite,
-                        height: 44,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: (state.activePage == index)
-                                ? Colors.amber
-                                : mainFon,
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(16),
-                                topRight: Radius.circular(16))),
-                        child: Text(listStages[index].name,
-                            style:
-                                (state.activePage == index) ? t26w500 : t29w500w),
+                  margin: (state.activePage == index) ? const EdgeInsets.all(0) : const EdgeInsets.all(30),
+                  child: Opacity(
+                    opacity: (state.activePage == index) ? 1 : 0.75,
+                    child: Transform.scale(
+                      scale: (state.activePage == index) ? 1 : 0.9,
+                      child: Column(
+                        children: [
+                          Container(
+                            width: double.maxFinite,
+                            height: 44,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: (state.cookingPage == index)
+                                    ? Colors.amber
+                                    : mainFon,
+                                borderRadius: const BorderRadius.only(
+                                    topLeft: Radius.circular(16),
+                                    topRight: Radius.circular(16))),
+                            child: Text(listStages[index].name, style: (state.cookingPage == index) ? t24w700 : t24w700w),
+                          ),
+                          Container(
+                            padding: const EdgeInsets.only(left: 20, right: 20, bottom: 16, top: 24),
+                              height: 331,
+                              decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                      bottomLeft: Radius.circular(16),
+                                      bottomRight: Radius.circular(16))),
+                              child: Column(
+                                children: [
+                                  
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      TemperatureTextWidget(name: 't камеры:' ,nowIndicate: state.tbox, indicates: listStages[index].tempB,),
+                                      TemperatureTextWidget(name: 't продукта:' ,nowIndicate: state.tprod, indicates: listStages[index].tempP,),
+                                    ],
+                                  ),
+                                    
+                                  const SizedBox(height: 24),
+                                    
+                                  Container(
+                                    width: double.maxFinite,
+                                    alignment: Alignment.center,
+                                    child: IndicateWidget(
+                                      listStage: listStages,
+                                      index: index,
+                                      color: mainFon,
+                                      size: 64,
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  const Divider(color: Color.fromARGB(255, 214, 214, 214)),
+                                  const SizedBox(height: 16),
+                                  SizedBox(
+                                    width: 142,
+                                    height: 54,
+                                    child: ContanerRadius(Colors.amber, 4, text: (listStages[index].time == 0) ? '∞' : (state.cookingPage == index) ? getTimeString(state.time)  : getTimeString(listStages[index].time), textSize: 1),
+                                  )
+                                ],
+                              )),
+                        ],
                       ),
-                      Container(
-                          height: 331,
-                          decoration: const BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(16),
-                                  bottomRight: Radius.circular(16))),
-                          child: Column(
-                            children: [
-                              const Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text('t камеры:', style: t24w500),
-                                  Text('t продукта:', style: t24w500),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text('${state.tbox}$indicate', style: t62w500),
-                                  Text('${state.tprod}$indicate', style: t62w500),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text('${listStages[index].tempB}$indicate', style: t34w500a),
-                                  Text('${listStages[index].tempP}$indicate', style: t34w500a),
-                                ],
-                              ),
-                              Container(
-                                width: double.maxFinite,
-                                alignment: Alignment.center,
-                                child: IndicateWidget(
-                                  listStage: listStages,
-                                  index: index,
-                                  color: mainFon,
-                                  size: 75,
-                                ),
-                              ),
-                              const Divider(color: Color.fromARGB(255, 214, 214, 214)),
-                              const SizedBox(height: 5),
-                              (listStages[index].time == 0)
-                                  ? ContanerRadius(Colors.white,
-                                      getTimeString(listStages[index].time), 1)
-                                  : ContanerRadius(Colors.amber,
-                                    (state.activePage == index) ? getTimeString(state.time) : getTimeString(listStages[index].time), 1)
-                            ],
-                          )),
-                    ],
+                    ),
                   ),
                 ),
               ),
             ),
           ),
           
-
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(onPressed: (){}, icon: const Icon(Icons.timer, size: 40, color: Colors.amber)),
-                CircleIndicateWidget(listStages.length, state.activePage),
-                IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const PageFive()));}, icon: const Icon(Icons.back_hand, size: 40, color: Colors.amber))
-              ],
-            ),
-          )
+          const Spacer(),
+          FooterWidget(listStages: listStages, activePage: state.activePage)
 
 
         ],
       ),
+    );
+  }
+}
+
+class FooterWidget extends StatelessWidget {
+  const FooterWidget({
+    super.key,
+    required this.listStages,
+    required this.activePage
+  });
+
+  final List<Stage> listStages;
+  final int activePage;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 52,
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          IconButton(onPressed: (){}, icon: const Icon(Icons.timer, size: 40, color: Colors.amber)),
+          CircleIndicateWidget(listStages.length, activePage),
+          IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const PageFive()));}, icon: const Icon(Icons.back_hand, size: 40, color: Colors.amber))
+        ],
+      ),
+    );
+  }
+}
+
+class TemperatureTextWidget extends StatelessWidget {
+  const TemperatureTextWidget({super.key,required this.nowIndicate,required this.indicates, required this.name});
+
+  final String name;
+  final double nowIndicate;
+  final double indicates;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(name, style: t20w400),
+        Row(
+          children: [
+            Text('$nowIndicate$indicate', style: t56w700),
+            const SizedBox(width: 6),
+            const Icon(Icons.arrow_forward, color: Colors.red),
+            Text('$indicates$indicate', style: t32w700a),
+          ],
+        ),
+      ],
     );
   }
 }

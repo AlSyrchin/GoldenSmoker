@@ -19,6 +19,7 @@ class CubitChat extends Cubit<StateChat> {
   int timeNow = 0;
   bool nextEtap = false;
   int whisEtap = 0;
+  bool isWater = false;
 
   double _fCommand(String command) => int.parse(command.substring(2)) / 10;
 
@@ -39,6 +40,8 @@ class CubitChat extends Cubit<StateChat> {
         case 'R*': step = int.parse(command.substring(2));break;
         case 'L-': lamp = false;break;
         case 'L+': lamp = true;break;
+        case 'W*': isWater = true;break;
+        case 'W!': isWater = false;break;
         case 'RM': _listRM(command);break;
         case 'MT': _listMT(command);break; //MT8/0>MP240/240~M!TFW
         case 'RN': whisEtap = int.parse(command.substring(2));break; //этапы
@@ -46,7 +49,7 @@ class CubitChat extends Cubit<StateChat> {
         default:
       }
     }
-    emit(state.copyWith(tp: tp, tb: tb, step: step, lamp: lamp, a: air, s: smoke, w: water, mb: mb, mt: mt, timePeriod: timePeriod, timeNow: timeNow, whisEtap: whisEtap, nextEtap: nextEtap));
+    emit(state.copyWith(tp: tp, tb: tb, step: step, lamp: lamp, a: air, s: smoke, w: water, mb: mb, mt: mt, timePeriod: timePeriod, timeNow: timeNow, whisEtap: whisEtap, nextEtap: nextEtap, isWater: isWater));
   }
 
   void _listMT(String comm) {

@@ -61,7 +61,8 @@ dependencies:
   get: ^4.6.5
   # Intl
   intl: ^0.18.1
-
+  #svg
+  flutter_svg: ^0.22.0
   # Библиотека для получения геолокации
   location: ^5.0.3
 

@@ -104,6 +104,7 @@ class ReorderableListWidget extends StatelessWidget {
           ),
         ),
         const Divider(),
+        const SizedBox(height: 12),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -123,9 +124,13 @@ class BtnCookWidget extends StatelessWidget {
   final List<Stage> stageList;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: () => {if (stageList.isNotEmpty) Navigator.push(context, MaterialPageRoute(builder: (context) => PageSeven(Recipe('Новый', '', '', stageList))))},
-        child: const ContanerRadius(Colors.white, 'Готовить', 1));
+    return SizedBox(
+      width: w(context, 320),
+      height: h(context, 128),
+      child: InkWell(
+          onTap: () => {if (stageList.isNotEmpty) Navigator.push(context, MaterialPageRoute(builder: (context) => PageSeven(Recipe('Новый', '', '', stageList))))},
+          child: const ContanerRadius(Colors.white, 16 ,text: 'Готовить', textSize: 1)),
+    );
   }
 }
 
@@ -133,13 +138,17 @@ class BtnSaveWidget extends StatelessWidget {
   const BtnSaveWidget({super.key});
   @override
     Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-        onPanDown: (_) => {
-          FocusScope.of(context).requestFocus(FocusNode()),
-          showDialog(context: context, builder: (context) => const DialogWidget()),
-        },
-        child: const ContanerRadius(Colors.amber, 'Сохранить', 1));
+    return SizedBox(
+      width: w(context, 320),
+      height: h(context, 128),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+          onPanDown: (_) => {
+            FocusScope.of(context).requestFocus(FocusNode()),
+            showDialog(context: context, builder: (context) => const DialogWidget()),
+          },
+          child: const ContanerRadius(Colors.amber, 16 ,text: 'Сохранить', textSize: 1)),
+    );
   }
 }
 
@@ -162,17 +171,21 @@ class DialogWidget extends StatelessWidget {
               const SizedBox(height: 20),
               TextControlWidget(),
               const SizedBox(height: 20),
-              InkWell(
-                onTap: () {
-                    SystemChannels.textInput.invokeMethod('TextInput.hide');
-                    context.read<CubitSix>().addRecipe();
-                    context.read<CubitOne>().clearStages();
-                    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                },
-                child: const ContanerRadius(Colors.amber, 'Готово', 1),
-                )
+              SizedBox(
+                width: 186,
+                height: 54,
+                child: InkWell(
+                  onTap: () {
+                      SystemChannels.textInput.invokeMethod('TextInput.hide');
+                      context.read<CubitSix>().addRecipe();
+                      context.read<CubitOne>().clearStages();
+                      SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                  },
+                  child: const ContanerRadius(Colors.amber, 8, text: 'Готово', textSize: 1),
+                  ),
+              )
             ],
           ),
         ),

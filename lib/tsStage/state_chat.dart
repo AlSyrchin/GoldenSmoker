@@ -14,7 +14,8 @@ class StateChat {
   final int timeNow;
   final bool nextEtap;
   final int whisEtap;
-  
+  final bool isWater;
+
   StateChat({
     this.message = '',
     this.listMsg = const [],
@@ -30,7 +31,8 @@ class StateChat {
     this.timePeriod = 0,
     this.timeNow = 0,
     this.nextEtap = false,
-    this.whisEtap = 0
+    this.whisEtap = 0,
+    this.isWater = false,
   });
 
   StateChat copyWith({
@@ -48,7 +50,8 @@ class StateChat {
     int? timePeriod,
     int? timeNow,
     bool? nextEtap,
-    int? whisEtap
+    int? whisEtap,
+    bool? isWater,
   }) {
     return StateChat(
       message: message ?? this.message,
@@ -65,7 +68,8 @@ class StateChat {
       timePeriod: timePeriod ?? this.timePeriod,
       timeNow: timeNow ?? this.timeNow,
       nextEtap: nextEtap ?? this.nextEtap,
-      whisEtap: whisEtap ?? this.whisEtap
+      whisEtap: whisEtap ?? this.whisEtap,
+      isWater: isWater ?? this.isWater,
     );
   }
 }
