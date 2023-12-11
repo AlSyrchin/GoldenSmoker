@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'state_new_step.dart';
 import 'constant.dart';
-import 'cubit_free.dart';
-import 'cubit_two.dart';
+import 'cubit_creater.dart';
+import 'cubit_line_btn.dart';
+import 'cubit_new_step.dart';
 import 'stage.dart';
-import 'state_free.dart';
-import 'state_two.dart';
+import 'state_line_btn.dart';
 import 'widgets.dart';
 
-class PageTwo extends StatelessWidget {
-  const PageTwo(this.stage, {super.key});
+class PageNewStep extends StatelessWidget {
+  const PageNewStep(this.stage, {super.key});
   final List<Stage> stage;
   @override
   Widget build(BuildContext context) {
@@ -22,63 +22,50 @@ class PageTwo extends StatelessWidget {
         backgroundColor: mainFon,
       ),
       backgroundColor: mainFon,
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        child: SingleChildScrollView(
-          child: BlocProvider(create: (context) => CubitFree(),
-          child: BlocBuilder<CubitFree,StateFree>(builder: (context, state) => Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              
-              const ButtonListWidget(),
-              const SizedBox(height: 16*2),
-
-              state.btnList[1] ? const ToggleButtonsWidget('Заслонка') : Container(),
-              state.btnList[2] ? const ToggleButtonsWidget('Пароген')  : Container(),
-              state.btnList[3] ? const ToggleButtonsWidget('Компрессор') : Container(),
-
-              state.btnList[5] ? TextControlWidget(true): Container(),
-              const SizedBox(height: 16),
-
-              state.btnList[0] || state.btnList[4] ? Container() : TextControlWidget(false),
-              const SizedBox(height: 16),
-        
-              const SliderWidget(true), 
-              const SizedBox(height: 16),
-        
-              const SliderWidget(false), 
-              const SizedBox(height: 16),
-
-              state.btnList[5] ? const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SwitchWidget(0),
-                  SizedBox(width: 16),
-                  SwitchWidget(1),
-                  SizedBox(width: 16),
-                  SwitchWidget(2),
-                  SizedBox(width: 16),
-                  SwitchWidget(3),
-                  SizedBox(width: 16),
-                  SwitchWidget(4),
-                ],
-              ) : Container(),
-              
-              const Divider(),
-              const SizedBox(height: 12),
-              ButtonAddWidgwet(state.btnList),
-
-            ],
-          ),),),
+      body:  BlocProvider(
+        create: (context) => CubitNewStep(),
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          child: SingleChildScrollView(
+            child: BlocProvider(create: (context) => CubitLineBTN(),
+            child: BlocBuilder<CubitLineBTN,StateLineBTN>(builder: (context, state) => Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const ButtonListWidget(),
+                const SizedBox(height: 32),
+                Visibility(visible: state.btnList[1], child: const ToggleButtonsWidget('Заслонка')),
+                Visibility(visible: state.btnList[2], child: const ToggleButtonsWidget('Пароген')),
+                Visibility(visible: state.btnList[3], child: const ToggleButtonsWidget('Компрессор')),
+                Visibility(visible: state.btnList[5], child: TextControlWidget(true)),
+                const SizedBox(height: 16),
+                Visibility(visible: !(state.btnList[0] || state.btnList[4]), child: TextControlWidget(false)),
+                const SizedBox(height: 16),
+                const SliderWidget(true), 
+                const SizedBox(height: 16),
+                const SliderWidget(false), 
+                const SizedBox(height: 16),
+                Visibility(
+                      visible: state.btnList[5],
+                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: Iterable.generate(5, (index) => SwitchWidget(index)).toList(),
+                            ),
+                    ),
+                const Divider(),
+                const SizedBox(height: 12),
+                ButtonAddStage(state.btnList, stage: stage),
+              ],
+            ),),),
+          ),
         ),
       ),
     );
   }
 }
 
-class ButtonAddWidgwet extends StatelessWidget {
-  const ButtonAddWidgwet(this.list, {super.key});
+class ButtonAddStage extends StatelessWidget {
+  const ButtonAddStage(this.list, {super.key, required this.stage});
 
+  final List<Stage> stage;
   final List<bool> list;
 
   @override
@@ -88,8 +75,9 @@ class ButtonAddWidgwet extends StatelessWidget {
       height: h(context, 128),
       child: InkWell(
         onTap: (){
-          context.read<CubitTwo>().addItem(list);
-          context.read<CubitTwo>().restart();
+          context.read<CubitNewStep>().addItem(stage, list);
+          context.read<CubitNewStep>().restart();
+          context.read<CubitCreater>().restart();
           Navigator.pop(context);
         },
         child: const ContanerRadius(Colors.amber, 16, text: 'Добавить', textSize: 1)),
@@ -136,10 +124,10 @@ class SwitchWidget extends StatelessWidget {
     return Row(children: [
       Text('${listName[isWho]}: '),
       const SizedBox(width: 16),
-      BlocBuilder<CubitTwo, StateTwo>(
+      BlocBuilder<CubitNewStep, StateNewStep>(
         builder: (context, state) => Switch(
               value: isWho == 0 ? state.extractor : isWho == 1 ? state.smoke : isWho == 2 ? state.water : isWho == 3 ? state.flap : state.tens,
-              onChanged: (value) => context.read<CubitTwo>().toggleButton(isWho, value),
+              onChanged: (value) => context.read<CubitNewStep>().toggleButton(isWho, value),
               activeTrackColor: Colors.amberAccent,
               activeColor: Colors.amber,
             ))
@@ -152,10 +140,10 @@ class ButtonListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CubitFree, StateFree>(
+    return BlocBuilder<CubitLineBTN, StateLineBTN>(
       builder: (context, state) => ToggleButtons(
           direction: Axis.horizontal,
-          onPressed: (index) => context.read<CubitFree>().nextBtn(index),
+          onPressed: (index) => context.read<CubitLineBTN>().nextBtn(index),
           borderRadius: const BorderRadius.all(Radius.circular(8)),
           borderColor: Colors.white,
           selectedBorderColor: Colors.amber,
@@ -164,14 +152,7 @@ class ButtonListWidget extends StatelessWidget {
           color: Colors.white,
           constraints: const BoxConstraints(minHeight: 50.0,minWidth: 152.0),
           isSelected: state.btnList,
-          children: const [
-            Text('Отепление'),
-            Text('Сушка'),
-            Text('Варка'),
-            Text('Копчение'),
-            Text('Жарка'),
-            Text('Универсальный')
-          ]),
+          children: etapName.map((e) => Text(e)).toList()),
     );
   }
 }
@@ -182,38 +163,11 @@ class TextControlWidget extends StatelessWidget {
   final TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CubitTwo, StateTwo>(builder: (context, state) => TextFormField(
+    return BlocBuilder<CubitNewStep, StateNewStep>(builder: (context, state) => TextFormField(
       controller: _textEditingController,
       style: const TextStyle(color: Colors.white),
       keyboardType: isWho ? TextInputType.name : TextInputType.number,
-      onChanged: (value) => isWho ? context.read<CubitTwo>().addName(value) : context.read<CubitTwo>().addTime(value),
-      decoration: InputDecoration(
-        isDense: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: 13, horizontal: 24),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8), borderSide: const BorderSide(color: Colors.white)),
-        labelText: isWho ? 'Название' : 'Время',
-        labelStyle: const TextStyle(color: Color.fromRGBO(255, 255, 255, 0.8)),
-      ),
-      onTapOutside: (event) => {
-        // SystemChannels.textInput.invokeMethod('TextInput.hide'),
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky)
-      }
-    )
-    );
-  }
-}
-
-class TextControlWidgetT extends StatelessWidget {
-  TextControlWidgetT(this.isWho, {super.key});
-  final bool isWho;
-  final TextEditingController _textEditingController = TextEditingController();
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<CubitTwo, StateTwo>(builder: (context, state) => TextFormField(
-      controller: _textEditingController,
-      style: const TextStyle(color: Colors.white),
-      keyboardType: isWho ? TextInputType.name : TextInputType.number,
-      onChanged: (value) => isWho ? context.read<CubitTwo>().addName(value) : context.read<CubitTwo>().addTime(value),
+      onChanged: (value) => isWho ? context.read<CubitNewStep>().addName(value) : context.read<CubitNewStep>().addTime(value),
       decoration: InputDecoration(
         isDense: true,
         contentPadding: const EdgeInsets.symmetric(vertical: 13, horizontal: 24),
@@ -238,11 +192,11 @@ class SliderWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        isWho ? const Text('t камеры:') : const Text('t продукта:'),
+        Text(isWho ? 't камеры:' : 't продукта:'),
         const SizedBox(width: 20),
         SizedBox(
           width: 800,
-          child: BlocBuilder<CubitTwo, StateTwo>(builder: (context, state) => SliderTheme(
+          child: BlocBuilder<CubitNewStep, StateNewStep>(builder: (context, state) => SliderTheme(
                           data: SliderThemeData(
                             trackHeight: 16 * 0.5,
                             thumbShape: SliderThemeRectangle(0.5),
@@ -257,8 +211,8 @@ class SliderWidget extends StatelessWidget {
                               max: 100.0,
                               value: isWho ? state.tbox : state.tprod,
                               onChanged: (value) {
-                                if (isWho) {context.read<CubitTwo>().addTbox(value.roundToDouble());}
-                                else {context.read<CubitTwo>().addTprod(value.roundToDouble());}
+                                if (isWho) {context.read<CubitNewStep>().addTbox(value.roundToDouble());}
+                                else {context.read<CubitNewStep>().addTprod(value.roundToDouble());}
                               },
                             ),
                         ),),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const t24w500 = TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: mainFon);
 const t20w400 = TextStyle(fontSize: 20, color: mainFon);
+const t20w400w = TextStyle(fontSize: 20, color: Colors.white);
 const t20w500 = TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: mainFon);
 const t14w500 = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: mainFon);
 const t26w500 = TextStyle(fontSize: 26, fontWeight: FontWeight.w500, color: mainFon);
@@ -22,6 +23,7 @@ const Color mainFon = Color.fromRGBO(31, 10, 9, 1);
 const Color noActive = Color.fromRGBO(179, 179, 179, 1);
 const Color mainFon04 = Color.fromRGBO(31, 10, 9, 0.4);
 const Color white02 = Color.fromRGBO(255, 255, 255, 0.2);
+const Color white06 = Color.fromRGBO(255, 255, 255, 0.6);
 const String indicate = '°';
 const defaultPadding = 12.0;
 
@@ -43,13 +45,8 @@ class IdName {
   );
 }
 
-List<IdName> nameStep = [
-  IdName(0, 'Отепление'),
-  IdName(1, 'Сушка'),
-  IdName(2, 'Варка'),
-  IdName(3, 'Копчение'),
-  IdName(4, 'Жарка'),
-];
+List<String> etapName = ['Отепление','Сушка','Варка', 'Копчение', 'Жарка', 'Универсальный'];
+
 
 double h(context, double height){
   return MediaQuery.of(context).size.height * height/990; 
@@ -177,6 +174,15 @@ const svgRectanle = '''<svg xmlns="http://www.w3.org/2000/svg" width="103" heigh
   <ellipse cx="90.2923" cy="13" rx="12.7078" ry="13" fill="url(#paint1_linear_106_1895)"/>
   <ellipse cx="12.7078" cy="13" rx="12.7078" ry="13" fill="url(#paint2_linear_106_1895)"/>
   <defs>
+  </defs>
+</svg>''';
 
+const svgLamp = '''<svg xmlns="http://www.w3.org/2000/svg" width="29" height="45" viewBox="0 0 29 45" fill="none">
+  <linearGradient id="paint0_linear_106_1411" x1="14.5" y1="0" x2="14.5" y2="45" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FDD443"/>
+      <stop offset="1" stop-color="#EF9D1A"/>
+    </linearGradient>
+  <path fill-rule="evenodd" clip-rule="evenodd" d="M20.8604 30.4041H20.2229C20.3514 23.7193 25.758 19.4092 25.758 14.5264C25.758 -0.284913 3.19257 -1.00079 3.19257 14.7782C3.19257 19.9078 8.62884 22.7121 8.73262 30.3695H8.05061C6.568 30.3695 5.55487 29.7919 5.55487 28.7304C5.55487 25.4226 0 19.8831 0 14.9065C0 -5.37012 29 -4.45676 29 14.5807C29 20.13 23.5143 26.4988 23.5143 28.6465C23.4896 29.8314 22.3826 30.4041 20.8604 30.4041ZM12.37 12.7243L13.6796 30.2214L10.9911 30.2856C10.9911 30.2856 10.0571 19.424 9.78033 15.5632C9.50358 11.7024 12.37 12.7243 12.37 12.7243ZM15.2215 30.3004L16.294 12.6552C16.294 12.6552 19.4915 11.1741 19.1604 15.6175C18.8292 20.0609 17.9347 30.2264 17.9347 30.2264L15.2215 30.3004ZM22.2442 32.69C22.2442 32.69 22.1355 35.9336 22.1256 37.3753C22.1256 39.3501 19.017 41.8927 17.6777 42.1099C17.3911 45.951 11.688 45.9757 11.4853 42.1099C10.5365 41.9174 6.97819 39.6858 6.99301 37.4444C6.99301 35.7905 7.09186 32.7393 7.09186 32.7393L22.2442 32.69Z" fill="url(#paint0_linear_106_1411)"/>
+  <defs>
   </defs>
 </svg>''';

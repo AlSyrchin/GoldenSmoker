@@ -1,4 +1,4 @@
-class StateFive {
+class StateRules {
   final double temperature;
   final double tbox;
   final double tprod;
@@ -12,7 +12,7 @@ class StateFive {
   final bool lamp;
   final bool isWater;
 
-    StateFive({
+    StateRules({
     this.temperature = 0,
     this.tbox = 0.0,
     this.tprod = 0.0,
@@ -27,7 +27,7 @@ class StateFive {
     this.isWater = false,
   });
 
-  StateFive copyWith({
+  StateRules copyWith({
     double? temperature,
     double? tbox,
     double? tprod,
@@ -41,7 +41,7 @@ class StateFive {
     bool? lamp,
     bool? isWater,
   }) {
-    return StateFive(
+    return StateRules(
       temperature: temperature ?? this.temperature,
       tbox: tbox ?? this.tbox,
       tprod: tprod ?? this.tprod,

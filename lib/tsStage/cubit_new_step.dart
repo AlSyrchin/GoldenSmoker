@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'stage.dart';
-import 'state_two_copy.dart';
+import 'state_new_step.dart';
 
-class CubitTwoCopy extends Cubit<StateTwoCopy> {
+class CubitNewStep extends Cubit<StateNewStep> {
 
-  CubitTwoCopy() : super(StateTwoCopy());
+  CubitNewStep() : super(StateNewStep());
 
   void addItem(List<Stage> stage, List<bool> btnList) {
     if (btnList[0]) {stage.add(Related(state.tbox, state.tprod));}

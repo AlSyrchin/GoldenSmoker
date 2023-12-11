@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubit_bluetooth.dart';
-import 'cubit_one.dart';
+import 'cubit_text_input.dart';
 import 'stage.dart';
-import 'state_six.dart';
+import 'state_choise.dart';
 
-class CubitSix extends Cubit<StateSix> {
-  final CubitOne otherCubit;
+class CubitChoise extends Cubit<StateChoise> {
+  final CubitTextInput otherCubit;
   final CubitBluetooth cubitBluetooth;
   
   static final List<Recipe> initList = [
@@ -16,10 +16,10 @@ class CubitSix extends Cubit<StateSix> {
     Recipe('Тест', 'assets/images/001.png', 'info Тест', [Boiling(24, 24, 9), Drying(18, 17, 10), Smoking(1, 1, 7), Related(28, 27.5)])
   ];
 
-  CubitSix(this.otherCubit, this.cubitBluetooth) : super(StateSix(stages: initList, queryStages: initList));
+  CubitChoise(this.otherCubit, this.cubitBluetooth) : super(StateChoise(stages: initList, queryStages: initList));
 
-  void addRecipe(){
-    Recipe newRecipe = Recipe(otherCubit.state.name, 'assets/images/005.png', 'inf', otherCubit.state.stage);
+  void addRecipe(List<Stage> stage){
+    Recipe newRecipe = Recipe(otherCubit.state, 'assets/images/005.png', 'inf', stage);
     List<Recipe> newState = state.stages;
     newState.add(newRecipe);
     emit(state.copyWith(stages: newState));

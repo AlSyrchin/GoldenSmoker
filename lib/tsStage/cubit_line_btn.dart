@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'state_free.dart';
+import 'state_line_btn.dart';
 
-class CubitFree extends Cubit<StateFree> {
-  CubitFree() : super(StateFree());
+class CubitLineBTN extends Cubit<StateLineBTN> {
+  CubitLineBTN() : super(StateLineBTN());
 
   void nextBtn(int index) {
     List<bool> newList = [];

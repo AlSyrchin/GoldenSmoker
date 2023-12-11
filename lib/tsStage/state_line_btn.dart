@@ -1,14 +1,14 @@
-class StateFree {
+class StateLineBTN {
   final List<bool> btnList;
 
-  StateFree({
+  StateLineBTN({
     this.btnList = const [true,false,false,false,false,false]
   });
 
-  StateFree copyWith({
+  StateLineBTN copyWith({
     List<bool>? btnList,
   }) {
-    return StateFree(
+    return StateLineBTN(
       btnList: btnList ?? this.btnList,
     );
   }

@@ -1,4 +1,4 @@
-class StateTwo {
+class StateNewStep {
   final String name;
   final double tbox;
   final double tprod;
@@ -10,7 +10,7 @@ class StateTwo {
   final bool tens;
   final List<bool> btnList;
 
-  StateTwo({
+  StateNewStep({
     this.name = '',
     this.tbox = 0,
     this.tprod = 0,
@@ -23,7 +23,7 @@ class StateTwo {
     this.btnList = const [true,false,false,false,false,false]
   });
 
-  StateTwo copyWith({
+  StateNewStep copyWith({
     String? name,
     double? tbox,
     double? tprod,
@@ -35,7 +35,7 @@ class StateTwo {
     bool? tens,
     List<bool>? btnList,
   }) {
-    return StateTwo(
+    return StateNewStep(
       name: name ?? this.name,
       tbox: tbox ?? this.tbox,
       tprod: tprod ?? this.tprod,

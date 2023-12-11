@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'constant.dart';
 
-class PageTen extends StatelessWidget {
-  const PageTen({super.key});
+class PageSettings extends StatelessWidget {
+  const PageSettings({super.key});
 
   @override
   Widget build(BuildContext context) {

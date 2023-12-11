@@ -1,12 +1,11 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'stage.dart';
 
-class StateSix {
+class StateChoise {
   final List<Recipe> stages;
   final List<Recipe> queryStages;
   final String query;
   final bool isSearch;
-  StateSix({
+  StateChoise({
     required this.stages,
     this.queryStages = const [],
     this.query = '',
@@ -14,13 +13,13 @@ class StateSix {
   });
 
 
-  StateSix copyWith({
+  StateChoise copyWith({
     List<Recipe>? stages,
     List<Recipe>? queryStages,
     String? query,
     bool? isSearch,
   }) {
-    return StateSix(
+    return StateChoise(
       stages: stages ?? this.stages,
       queryStages: queryStages ?? this.queryStages,
       query: query ?? this.query,

@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubit_bluetooth.dart';
 import 'stage.dart';
-import 'state_seven.dart';
+import 'state_cooking.dart';
 
-class CubitSeven extends Cubit<StateSeven> {
+class CubitCooking extends Cubit<StateCooking> {
   final CubitBluetooth cubitBluetooth;
-  CubitSeven(this.cubitBluetooth) : super(StateSeven()){
+  CubitCooking(this.cubitBluetooth) : super(StateCooking()){
     cubitBluetooth.otherCubitChat.stream.listen((event) {}).onData((data) {
       emit(state.copyWith(tbox: data.tb, tprod: data.tp, time: data.timeNow, lamp: data.lamp, cookingPage: data.whisEtap));
       // if (state.activePage < data.whisEtap) state.pageController.jumpToPage(data.whisEtap);

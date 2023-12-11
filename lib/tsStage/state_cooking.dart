@@ -1,6 +1,4 @@
-// import 'package:flutter/material.dart';
-
-class StateSeven {
+class StateCooking {
   final int activePage;
   final double tbox;
   final double tprod;
@@ -8,7 +6,7 @@ class StateSeven {
   final bool lamp;
   final int cookingPage;
 
-  StateSeven({
+  StateCooking({
     this.activePage = 0,
     this.tbox = 0,
     this.tprod = 0,
@@ -17,7 +15,7 @@ class StateSeven {
     this.cookingPage = 0,
   });
 
-  StateSeven copyWith({
+  StateCooking copyWith({
     int? activePage,
     double? tbox,
     double? tprod,
@@ -25,7 +23,7 @@ class StateSeven {
     bool? lamp,
     int? cookingPage,
   }) {
-    return StateSeven(
+    return StateCooking(
       activePage: activePage ?? this.activePage,
       tbox: tbox ?? this.tbox,
       tprod: tprod ?? this.tprod,

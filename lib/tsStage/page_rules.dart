@@ -1,14 +1,13 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'cubit_five.dart';
-import 'state_five.dart';
+import 'cubit_rules.dart';
+import 'state_rules.dart';
 import 'constant.dart';
 import 'widgets.dart';
 
-class PageFive extends StatelessWidget {
-  const PageFive({super.key});
+class PageRules extends StatelessWidget {
+  const PageRules({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,55 +16,92 @@ class PageFive extends StatelessWidget {
         title: const Text('Прямое управление'),
         centerTitle: true,
         backgroundColor: mainFon,
-        actions: [
-          BlocBuilder<CubitFive, StateFive>(builder: (context, state) => Icon(Icons.water, size: 30, color: state.isWater ? Colors.amber : Colors.white,)) ,
-          IconButton(
-              onPressed: () => context.read<CubitFive>().toggleLamp(),
-              icon: BlocBuilder<CubitFive, StateFive>(builder: (context, state) => Icon(
-                Icons.light_mode_sharp, size: 30, color: state.lamp ? Colors.amber : Colors.white)
-                ,))
+        actions: const [
+          IconWaterWidget() ,
+          ButtonLampWidget()
         ],
       ),
       backgroundColor: mainFon,
       body: Container(
         padding: const EdgeInsets.all(20),
-        child:  Column(
+        child:  const Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-             Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                const StackContaner(name: 'Температура', content: SizedBox(width: 400, height: 120, child: SliderWidget()),),
-                const SizedBox(width: 20),
-                StackContaner(name: 'T камеры', content: SizedBox(width: 150, height: 120, child: Center(
-                  child: BlocBuilder<CubitFive, StateFive>(builder: (context, state) => TextAndArrowWidget(state.tbox, state.tboxUp)),
-                )),),
-                const SizedBox(width: 20),
-                StackContaner(name: 'T продукта', content: SizedBox(width: 150, height: 120, child: Center(
-                  child: BlocBuilder<CubitFive, StateFive>(builder: (context, state) => TextAndArrowWidget(state.tprod, state.tprodUp)),
-                )),),
-             ],
-             ),
-             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
-              height: 250,
-              width: double.maxFinite,
-               child: GridView.custom(
-                physics: const NeverScrollableScrollPhysics(),
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 2.5, mainAxisSpacing: 20, crossAxisSpacing: 20), 
-                childrenDelegate: SliverChildBuilderDelegate((context, index) => ButtonValue(index), childCount: 5),
-                ),
-             )
+            RulesTemperatureWidget(),
+            ButtonListIndicateGrid()
           ],
         ),
-      ),     
+      ),
     );
+  }
+}
+
+class RulesTemperatureWidget extends StatelessWidget {
+  const RulesTemperatureWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+     mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+       const StackContaner(name: 'Температура', content: SizedBox(width: 400, height: 120, child: SliderWidget()),),
+       const SizedBox(width: 20),
+       StackContaner(name: 'T камеры', content: SizedBox(width: 150, height: 120, child: Center(
+         child: BlocBuilder<CubitRules, StateRules>(builder: (context, state) => TextAndArrowWidget(state.tbox, state.tboxUp)),
+       )),),
+       const SizedBox(width: 20),
+       StackContaner(name: 'T продукта', content: SizedBox(width: 150, height: 120, child: Center(
+         child: BlocBuilder<CubitRules, StateRules>(builder: (context, state) => TextAndArrowWidget(state.tprod, state.tprodUp)),
+       )),),
+    ],
+    );
+  }
+}
+
+class ButtonListIndicateGrid extends StatelessWidget {
+  const ButtonListIndicateGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+     padding: const EdgeInsets.symmetric(horizontal: 40),
+     height: 250,
+     width: double.maxFinite,
+      child: GridView.custom(
+       physics: const NeverScrollableScrollPhysics(),
+       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3, childAspectRatio: 2.5, mainAxisSpacing: 20, crossAxisSpacing: 20), 
+       childrenDelegate: SliverChildBuilderDelegate((context, index) => ButtonValue(index), childCount: 5),
+       ),
+    );
+  }
+}
+
+class IconWaterWidget extends StatelessWidget {
+  const IconWaterWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CubitRules, StateRules>(builder: (context, state) => Icon(Icons.water, size: 30, color: state.isWater ? Colors.amber : Colors.white,));
+  }
+}
+
+class ButtonLampWidget extends StatelessWidget {
+  const ButtonLampWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        onPressed: () => context.read<CubitRules>().toggleLamp(),
+        icon: BlocBuilder<CubitRules, StateRules>(builder: (context, state) => Icon(
+          Icons.light_mode_sharp, size: 30, color: state.lamp ? Colors.amber : Colors.white)
+          ,));
   }
 }
 
 class TextAndArrowWidget extends StatelessWidget {
   const TextAndArrowWidget(this.temperature, this.isUp, {super.key});
+
   final double temperature;
   final bool isUp;
 
@@ -122,9 +158,9 @@ class ButtonValue extends StatelessWidget {
           children: [
             Text(toNameBtn(isWho), style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 10),
-             BlocBuilder<CubitFive, StateFive>(builder: (context, state) => ToggleButtons(
+             BlocBuilder<CubitRules, StateRules>(builder: (context, state) => ToggleButtons(
                         direction: Axis.horizontal,
-                        onPressed: (int index) => context.read<CubitFive>().nextBtn(index, isWho),
+                        onPressed: (int index) => context.read<CubitRules>().nextBtn(index, isWho),
                         borderRadius: const BorderRadius.all(Radius.circular(8)),
                         borderColor: Colors.white,
                         selectedBorderColor: Colors.white,
@@ -154,7 +190,7 @@ class SliderWidget extends StatelessWidget {
   const SliderWidget({super.key});
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CubitFive, StateFive>(builder: (context, state) => SliderTheme(
+    return BlocBuilder<CubitRules, StateRules>(builder: (context, state) => SliderTheme(
                     data: SliderThemeData(
                       trackHeight: 16 * 0.5,
                       thumbShape: SliderThemeRectangle(0.5),
@@ -168,8 +204,8 @@ class SliderWidget extends StatelessWidget {
                         min: 0.0,
                         max: 200.0,
                         value: state.temperature,
-                        onChanged: (value) => context.read<CubitFive>().addT(value.roundToDouble()),
-                        onChangeEnd: (value) => context.read<CubitFive>().upD(),
+                        onChanged: (value) => context.read<CubitRules>().addT(value.roundToDouble()),
+                        onChangeEnd: (value) => context.read<CubitRules>().upD(),
                       ),
                   ),
                   );

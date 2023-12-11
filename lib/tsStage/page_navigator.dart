@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:goldensmoker/tsStage/page_ten.dart';
+import 'stage.dart';
 import 'cubit_bluetooth.dart';
-import 'page_five.dart';
+import 'page_creater.dart';
 import 'constant.dart';
-import 'page_one.dart';
-import 'page_six.dart';
 import 'state_bluetooth.dart';
 import 'widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class PageFour extends StatelessWidget {
-  const PageFour({super.key});
+class PageNavigator extends StatelessWidget {
+  const PageNavigator({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +17,7 @@ class PageFour extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: mainFon,
           title: BlocBuilder<CubitBluetooth, StateBluetooth>(
-              builder: (context, state) => state.bluetoothState.stringValue ==
-                      'STATE_ON'
+              builder: (context, state) => state.bluetoothState.stringValue == 'STATE_ON'
                   ? const Icon(Icons.bluetooth, color: Colors.amber)
                   : const Icon(Icons.bluetooth_disabled, color: Colors.grey)),
         ),
@@ -60,7 +57,7 @@ class ButtonRectangle extends StatelessWidget {
       width: 150,
       height: 150,
       child: InkWell(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PageTen(),)), 
+        onTap: () => Navigator.pushNamed(context, '/settings'),
         child: ContanerRadius(Colors.white, 24, child: Padding(padding: const EdgeInsets.all(24), child: SvgPicture.string(svgRectanle),)
         )
         ),
@@ -79,7 +76,7 @@ class ButtonCreateRecipe extends StatelessWidget {
     width: 150,
     height: 150,
     child: InkWell(
-      onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PageOne(),)), 
+      onTap: () => Navigator.push(context,MaterialPageRoute(builder: (context) => PageCreater(Recipe('', '', '', []), true))),
       child: 
       ContanerRadius(Colors.white, 24, child: Stack(children: [
           Positioned(right: 0 ,child: SvgPicture.string(svgCreateRecipe)),
@@ -88,7 +85,7 @@ class ButtonCreateRecipe extends StatelessWidget {
             children: [
                 Padding(
                   padding: EdgeInsets.only(left: 18,  right: 50, bottom: 20),
-                  child: Text('Создать рецепт', style: t20w500,),
+                  child: Text('Создать рецепт', style: t20w500),
                 )
           ],)
       ],)
@@ -99,9 +96,7 @@ class ButtonCreateRecipe extends StatelessWidget {
 }
 
 class ButtonDirectControl extends StatelessWidget {
-  const ButtonDirectControl({
-    super.key,
-  });
+  const ButtonDirectControl({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -109,7 +104,7 @@ class ButtonDirectControl extends StatelessWidget {
       width: 320,
       height: 300,
       child: InkWell(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PageFive(),)), 
+        onTap: () => Navigator.pushNamed(context, '/rules'),
         child: 
         ContanerRadius(Colors.white, 24, 
           child: Stack(children: [
@@ -138,7 +133,7 @@ class ButtonBookRecipe extends StatelessWidget {
       width: 350,
       height: 470,
       child: InkWell(
-        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const PageSix(),)), 
+        onTap: () => Navigator.pushNamed(context, '/choise'),
         child: ContanerRadius(Colors.white, 24, child: 
         Stack(children: [
           Positioned(top: 55, left: 90, right: 90 ,child: SvgPicture.string(svgBookRecipe)),

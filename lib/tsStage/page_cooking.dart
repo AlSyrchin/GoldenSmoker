@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:goldensmoker/tsStage/cubit_time.dart';
-import 'package:goldensmoker/tsStage/page_five.dart';
-import 'cubit_seven.dart';
-import 'state_seven.dart';
+import 'cubit_time.dart';
+import 'page_rules.dart';
+import 'cubit_cooking.dart';
+import 'state_cooking.dart';
 import 'constant.dart';
 import 'stage.dart';
 import 'widgets.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class PageSeven extends StatelessWidget {
-  const PageSeven(this.recipe, {super.key});
+class PageCooking extends StatelessWidget {
+  const PageCooking(this.recipe, {super.key});
   final Recipe recipe;
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class PageSeven extends StatelessWidget {
         ),
         leading: IconButton(
           onPressed: (){
-            context.read<CubitSeven>().btnBack();
+            context.read<CubitCooking>().btnBack();
             Navigator.of(context).pop();
         }, 
         icon: const Icon(Icons.close, color: Colors.red,)
@@ -34,9 +35,9 @@ class PageSeven extends StatelessWidget {
 
         actions: [
           IconButton(
-              onPressed: () => context.read<CubitSeven>().toggleLamp(),
-              icon: BlocBuilder<CubitSeven, StateSeven>(builder: (context, state) => Icon(
-                Icons.light_mode_sharp, size: 40, color: state.lamp ? Colors.amber : Colors.white)
+              onPressed: () => context.read<CubitCooking>().toggleLamp(),
+              icon: BlocBuilder<CubitCooking, StateCooking>(builder: (context, state) =>  SvgPicture.string(svgLamp, color: state.lamp ? Colors.amber : Colors.white)
+              // Icon(Icons.light_mode_sharp, size: 40, color: state.lamp ? Colors.amber : Colors.white)
                 ,)),
         ],
         backgroundColor: mainFon,
@@ -74,7 +75,7 @@ class SliderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PageController pageController = PageController(viewportFraction: 0.65);
-    return BlocBuilder<CubitSeven, StateSeven>(
+    return BlocBuilder<CubitCooking, StateCooking>(
       builder: (context, state) => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -84,7 +85,7 @@ class SliderWidget extends StatelessWidget {
             width: double.maxFinite,
             child: PageView.builder(
               controller: pageController,
-              onPageChanged: (value) {context.read<CubitSeven>().btnNext(value);},
+              onPageChanged: (value) {context.read<CubitCooking>().btnNext(value);},
               itemCount: listStages.length,
               itemBuilder: (context, index) => FittedBox(
                 child: AnimatedContainer(
@@ -192,7 +193,7 @@ class FooterWidget extends StatelessWidget {
         children: [
           IconButton(onPressed: (){}, icon: const Icon(Icons.timer, size: 40, color: Colors.amber)),
           CircleIndicateWidget(listStages.length, activePage),
-          IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const PageFive()));}, icon: const Icon(Icons.back_hand, size: 40, color: Colors.amber))
+          IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const PageRules()));}, icon: const Icon(Icons.back_hand, size: 40, color: Colors.amber))
         ],
       ),
     );

@@ -1,11 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'stage.dart';
-import 'state_eigth.dart';
+import 'state_creater.dart';
 import 'cubit_bluetooth.dart';
 
-class CubitEigth extends Cubit<StateEigth> {
+class CubitCreater extends Cubit<StateCreater> {
   final CubitBluetooth cubitBluetooth;
-  CubitEigth(this.cubitBluetooth) : super(StateEigth());
+  CubitCreater(this.cubitBluetooth) : super(StateCreater());
 
   void toggleBtn() {
     emit(state.copyWith(isSettings: !state.isSettings));

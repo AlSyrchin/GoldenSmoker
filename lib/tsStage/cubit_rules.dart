@@ -1,15 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubit_bluetooth.dart';
 import 'cubit_chat.dart';
-import 'state_five.dart';
+import 'state_rules.dart';
 
-class CubitFive extends Cubit<StateFive> {
+class CubitRules extends Cubit<StateRules> {
   final CubitChat cubitChat;
   final CubitBluetooth cubitBluetooth;
   bool tboxUp = false;
   bool tprodUp = false;
 
-  CubitFive(this.cubitChat, this.cubitBluetooth) : super(StateFive()){
+  CubitRules(this.cubitChat, this.cubitBluetooth) : super(StateRules()){
     emit(state.copyWith(temperature: 0, tbox: cubitChat.state.tb, tprod: cubitChat.state.tp, btnSmoke: [!cubitChat.state.s, cubitChat.state.s], btnWater: [!cubitChat.state.w, cubitChat.state.w], btnExtractor: [!cubitChat.state.a, cubitChat.state.a]));
   
     cubitChat.stream.listen((event) {}).onData((data) {

@@ -1,13 +1,13 @@
-class StateEigth {
+class StateCreater {
   final bool isSettings;
-  StateEigth({
+  StateCreater({
     this.isSettings = false,
   });
 
-  StateEigth copyWith({
+  StateCreater copyWith({
     bool? isSettings,
   }) {
-    return StateEigth(
+    return StateCreater(
       isSettings: isSettings ?? this.isSettings,
     );
   }
