@@ -82,11 +82,10 @@ class IndicateWidget extends StatelessWidget {
 }
 
 class ContanerRadius extends StatelessWidget {
-  const ContanerRadius(this.color, this.radius, {this.text, this.child, this.textSize, super.key});
+  const ContanerRadius(this.color, this.radius, {this.text, this.child, super.key});
   final Color color;
   final String? text;
   final double radius;
-  final double? textSize;
   final Widget? child;
   @override
   Widget build(BuildContext context) {
@@ -97,7 +96,7 @@ class ContanerRadius extends StatelessWidget {
         // height: h(context, 320 * height),
         color: color,
         // decoration: BoxDecoration(color: color, borderRadius: BorderRadius.all(Radius.circular(16 * width))),
-        child: child ?? Center(child: Text(text!, style: TextStyle(color: mainFon, fontSize: h(context, 48 * textSize!)), textAlign: TextAlign.center,))
+        child: child ?? Center(child: Text(text!, style: TextStyle(color: mainFon, fontSize: h(context, 48)), textAlign: TextAlign.center,))
       ),
     );
   }
@@ -120,7 +119,7 @@ class StackContaner extends StatelessWidget {
       children: [
         Container(
           margin: EdgeInsets.only(top: size.height * 0.013),
-          padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white, width: 2),
             borderRadius: BorderRadius.circular(8),

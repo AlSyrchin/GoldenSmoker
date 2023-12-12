@@ -17,10 +17,10 @@ class CubitBluetooth extends Cubit<StateBluetooth> {
 
   Future<void> init() async {
     await state.bluetooth.requestEnable();
-    await state.bluetooth.name.then((name) => emit(state.copyWith(nameDevice: name)));
-    await state.bluetooth.address.then((address) => emit(state.copyWith(addresDevice: address)));
-    await state.bluetooth.state.then((blState) => emit(state.copyWith(bluetoothState: blState)));
-    await state.bluetooth.getBondedDevices().then((list) => emit(state.copyWith(listDevices: list)));
+    state.bluetooth.name.then((name) => emit(state.copyWith(nameDevice: name)));
+    state.bluetooth.address.then((address) => emit(state.copyWith(addresDevice: address)));
+    state.bluetooth.state.then((blState) => emit(state.copyWith(bluetoothState: blState)));
+    state.bluetooth.getBondedDevices().then((list) => emit(state.copyWith(listDevices: list)));
     await _getDevice();
     await connectChat();
 

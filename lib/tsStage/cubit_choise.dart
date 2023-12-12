@@ -25,17 +25,7 @@ class CubitChoise extends Cubit<StateChoise> {
     emit(state.copyWith(stages: newState));
   }
 
-  // void loadRecipe(Recipe recipe) {
-  //   String newCom = 'RA_R!';
-  //   for (var stage in recipe.stages) {
-  //     newCom = '${newCom}_${stage.command}';
-  //   }
-  //   cubitBluetooth.sendMessage(newCom);
-  // }
-
-  void addString(String query) {
-
-  // List<Recipe> stages = [];
+  void stringSearch(String query) {
     final suggestions = state.stages.where((el) {
     final title = el.name.toLowerCase();
     final input = query.toLowerCase();
@@ -44,11 +34,11 @@ class CubitChoise extends Cubit<StateChoise> {
     emit(state.copyWith(query: query, queryStages: suggestions));
   }
 
-  void onSearch(){
-    emit(state.copyWith(isSearch: true));
+  void btnSearch(){
+    emit(state.copyWith(isSearch: !state.isSearch));
   }
-  
-  void offSearch(){
-    emit(state.copyWith(isSearch: false));
+
+  void nextBtn(){
+    emit(state.copyWith(btnGrid: state.btnGrid.reversed.toList()));
   }
 }

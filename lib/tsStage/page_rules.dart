@@ -43,18 +43,37 @@ class RulesTemperatureWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-     mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-       const StackContaner(name: 'Температура', content: SizedBox(width: 400, height: 120, child: SliderWidget()),),
-       const SizedBox(width: 20),
-       StackContaner(name: 'T камеры', content: SizedBox(width: 150, height: 120, child: Center(
-         child: BlocBuilder<CubitRules, StateRules>(builder: (context, state) => TextAndArrowWidget(state.tbox, state.tboxUp)),
-       )),),
-       const SizedBox(width: 20),
-       StackContaner(name: 'T продукта', content: SizedBox(width: 150, height: 120, child: Center(
-         child: BlocBuilder<CubitRules, StateRules>(builder: (context, state) => TextAndArrowWidget(state.tprod, state.tprodUp)),
-       )),),
-    ],
+        const StackContaner(
+          name: 'Температура',
+          content: SizedBox(width: 400, height: 120, child: SliderWidget()),
+        ),
+        const SizedBox(width: 20),
+        StackContaner(
+          name: 'T камеры',
+          content: SizedBox(
+              width: 150,
+              height: 120,
+              child: Center(
+                child: BlocBuilder<CubitRules, StateRules>(
+                    builder: (context, state) =>
+                        TextAndArrowWidget(state.tbox, state.tboxUp)),
+              )),
+        ),
+        const SizedBox(width: 20),
+        StackContaner(
+          name: 'T продукта',
+          content: SizedBox(
+              width: 150,
+              height: 120,
+              child: Center(
+                child: BlocBuilder<CubitRules, StateRules>(
+                    builder: (context, state) =>
+                        TextAndArrowWidget(state.tprod, state.tprodUp)),
+              )),
+        ),
+      ],
     );
   }
 }
@@ -121,42 +140,16 @@ class ButtonValue extends StatelessWidget {
   const ButtonValue(this.isWho, {super.key});
   final int isWho;
 
-  String toNameBtn(int isWho){
-    String res;
-    switch (isWho) {
-        case 0: res = 'Заслонка';break;
-        case 1: res = 'Дымоген';break;
-        case 2: res = 'Пароген';break;
-        case 3: res = 'Вытяжка';break;
-        case 4: res = 'Тен';break;
-        default: res = 'None';
-      }
-    return res;
-  }
-
-  IconData toIconBtn(int isWho){
-    IconData res;
-    switch (isWho) {
-        case 0: res = Icons.extension;break;
-        case 1: res = Icons.smoking_rooms_rounded;break;
-        case 2: res = Icons.opacity;break;
-        case 3: res = Icons.leak_add;break;
-        case 4: res = Icons.texture_rounded;break;
-        default: res = Icons.back_hand;
-      }
-    return res;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(toIconBtn(isWho), size: 52, color: white02),
+        Icon(context.read<CubitRules>().toIconBtn(isWho), size: 52, color: white02),
         const SizedBox(width: 24),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(toNameBtn(isWho), style: const TextStyle(fontSize: 20)),
+            Text(context.read<CubitRules>().toNameBtn(isWho), style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 10),
              BlocBuilder<CubitRules, StateRules>(builder: (context, state) => ToggleButtons(
                         direction: Axis.horizontal,
@@ -171,7 +164,7 @@ class ButtonValue extends StatelessWidget {
                           minHeight: 50.0,
                           minWidth: 85.0,
                         ),
-                        isSelected: isWho == 0 ? state.btnExtractor : isWho == 1 ? state.btnSmoke : isWho == 2 ? state.btnWater : isWho == 3 ? state.btnFlap : state.btnTens,
+                        isSelected: context.read<CubitRules>().isSelected(isWho),
                         children: isWho == 3 ? const [Text('Закр.'), Text('Откр.')] : const [Text('Выкл.'), Text('Вкл.')]
                         ),
                         ),

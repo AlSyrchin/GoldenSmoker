@@ -33,7 +33,6 @@ class CubitNewStep extends Cubit<StateNewStep> {
     }
   }
 
-
   void addName(String text) {
     emit(state.copyWith(name: text));
   }

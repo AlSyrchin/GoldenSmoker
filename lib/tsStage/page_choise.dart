@@ -21,26 +21,31 @@ class PageChoise extends StatelessWidget {
                 ? const SearchTextWidget()
                 : const Text('Выберите рецепт'),
           ),
-          actions: [
-            BlocBuilder<CubitChoise, StateChoise>(
-                builder: (context, state) => IconButton(
-                    icon: Icon(state.isSearch ? Icons.clear : Icons.search),
-                    onPressed: () {
-                      state.isSearch
-                          ? context.read<CubitChoise>().offSearch()
-                          : context.read<CubitChoise>().onSearch();
-                    }))
+          actions: const [
+            // ButtonGrid(),
+            ButtonSearch()
           ],
         ),
         backgroundColor: mainFon,
-        body: BlocBuilder<CubitChoise, StateChoise>(builder: (context, state) => GridWidget(state.queryStages)));
+        body: BlocBuilder<CubitChoise, StateChoise>(builder: (context, state) => GridWidget(state.queryStages)),
+      );
+  }
+}
+
+class ButtonSearch extends StatelessWidget {
+  const ButtonSearch({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CubitChoise, StateChoise>(
+        builder: (context, state) => IconButton(
+            icon: Icon(state.isSearch ? Icons.clear : Icons.search),
+            onPressed: () => context.read<CubitChoise>().btnSearch()));
   }
 }
 
 class SearchTextWidget extends StatelessWidget {
-  const SearchTextWidget({
-    super.key,
-  });
+  const SearchTextWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +61,7 @@ class SearchTextWidget extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 borderSide: const BorderSide(color: Colors.white)),
           ),
-        onChanged: (value) => context.read<CubitChoise>().addString(value),
+        onChanged: (value) => context.read<CubitChoise>().stringSearch(value),
         onTapOutside: (event) => {
           SystemChannels.textInput.invokeMethod('TextInput.hide'),
           SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky)
@@ -82,8 +87,7 @@ class SliderWidget extends StatelessWidget {
             borderRadius: BorderRadius.circular(15.0),
             child: Image.asset(listRecipe[index].image,
                 fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) =>
-                    const Center(child: Text('Error load image'))),
+                errorBuilder: (context, error, stackTrace) => const Center(child: Text('Error load image'))),
           ),
           Text(listRecipe[index].name)
         ],
@@ -112,16 +116,38 @@ class GridWidget extends StatelessWidget {
                     child: Image.asset(listRecipe[index].image,
                         fit: BoxFit.contain,
                         color: Colors.amber,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Center(child: Text('Error load image'))),
+                        errorBuilder: (context, error, stackTrace) => const Center(child: Text('Error load image'))),
                   ),
                   const SizedBox(height: 16),
-                  Text(
-                    listRecipe[index].name,
-                    style: const TextStyle(fontSize: 20),
-                  )
+                  Text(listRecipe[index].name, style: t20w400w)
                 ],
               ),
             ));
   }
 }
+
+/*
+class ButtonGrid extends StatelessWidget {
+  const ButtonGrid({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<CubitChoise, StateChoise>(
+        builder: (context, state) => ToggleButtons(
+                direction: Axis.horizontal,
+                onPressed: (index) => context.read<CubitChoise>().nextBtn(),
+                borderRadius: const BorderRadius.all(Radius.circular(8)),
+                borderColor: Colors.white,
+                selectedBorderColor: Colors.white,
+                selectedColor: mainFon,
+                fillColor: Colors.white,
+                color: Colors.white,
+                constraints: const BoxConstraints(
+                  minHeight: 40.0,
+                  minWidth: 40.0,
+                ),
+                isSelected: state.btnGrid,
+                children: const [Icon(Icons.graphic_eq_rounded),Icon(Icons.grid_4x4)]));
+  }
+}
+*/

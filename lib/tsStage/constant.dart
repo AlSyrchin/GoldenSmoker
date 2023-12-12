@@ -1,49 +1,34 @@
 import 'package:flutter/material.dart';
 
-const t24w500 = TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: mainFon);
-const t20w400 = TextStyle(fontSize: 20, color: mainFon);
-const t20w400w = TextStyle(fontSize: 20, color: Colors.white);
-const t20w500 = TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: mainFon);
 const t14w500 = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: mainFon);
-const t26w500 = TextStyle(fontSize: 26, fontWeight: FontWeight.w500, color: mainFon);
+const t16w400 = TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
+const t20w400 = TextStyle(fontSize: 20, color: mainFon);
+const t20w400w = TextStyle(fontSize: 20, color: white);
+const t20w500 = TextStyle(fontSize: 20, fontWeight: FontWeight.w500, color: mainFon);
+const t24w500 = TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: mainFon);
+const t24w500a = TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: amber);
 const t24w700 = TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: mainFon);
-const t24w700w = TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Colors.white);
-const t29w500w = TextStyle(fontSize: 29, fontWeight: FontWeight.w500, color: Colors.white);
-const t62w500 = TextStyle(fontSize: 62, fontWeight: FontWeight.w500, color: mainFon);
+const t24w700w = TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: white);
+const t26w500 = TextStyle(fontSize: 26, fontWeight: FontWeight.w500, color: mainFon);
+const t29w500w = TextStyle(fontSize: 29, fontWeight: FontWeight.w500, color: white);
+const t32w500 = TextStyle(fontSize: 32, fontWeight: FontWeight.w500, color: mainFon);
+const t32w700a = TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: amber);
+const t46w700 = TextStyle(fontSize: 46, fontWeight: FontWeight.w700);
 const t56w700 = TextStyle(fontSize: 56, fontWeight: FontWeight.w700, color: mainFon);
 const t56w500g = TextStyle(fontSize: 56, fontWeight: FontWeight.w700, color: mainFon04);
-const t32w500 = TextStyle(fontSize: 32, fontWeight: FontWeight.w500, color: mainFon);
-const t32w700a = TextStyle(fontSize: 32, fontWeight: FontWeight.w700, color: Colors.amber);
-const t24w500a = TextStyle(fontSize: 24, fontWeight: FontWeight.w500, color: Colors.amber);
-const t46w700 = TextStyle(fontSize: 46, fontWeight: FontWeight.w700);
-const t16w400 = TextStyle(fontSize: 16, fontWeight: FontWeight.w400);
+const t62w500 = TextStyle(fontSize: 62, fontWeight: FontWeight.w500, color: mainFon);
 
 const stWidg = VisualDensity(horizontal: 0, vertical: -4);
+
 const Color mainFon = Color.fromRGBO(31, 10, 9, 1);
+const Color white = Color.fromRGBO(255, 255, 255, 1);
+const Color amber = Color.fromRGBO(255, 193, 7, 1);
 const Color noActive = Color.fromRGBO(179, 179, 179, 1);
 const Color mainFon04 = Color.fromRGBO(31, 10, 9, 0.4);
 const Color white02 = Color.fromRGBO(255, 255, 255, 0.2);
 const Color white06 = Color.fromRGBO(255, 255, 255, 0.6);
+
 const String indicate = '°';
-const defaultPadding = 12.0;
-
-const List<String> deviceCard = [
-  't камеры',
-  't продукта',
-  'Пароген',
-  'Компрессор',
-  'Заслонка',
-  'Вытяжка'
-];
-
-class IdName {
-  final int index;
-  final String name;
-  IdName(
-    this.index,
-    this.name,
-  );
-}
 
 List<String> etapName = ['Отепление','Сушка','Варка', 'Копчение', 'Жарка', 'Универсальный'];
 

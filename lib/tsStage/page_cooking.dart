@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'cubit_time.dart';
-import 'page_rules.dart';
 import 'cubit_cooking.dart';
 import 'state_cooking.dart';
 import 'constant.dart';
@@ -37,7 +36,6 @@ class PageCooking extends StatelessWidget {
           IconButton(
               onPressed: () => context.read<CubitCooking>().toggleLamp(),
               icon: BlocBuilder<CubitCooking, StateCooking>(builder: (context, state) =>  SvgPicture.string(svgLamp, color: state.lamp ? Colors.amber : Colors.white)
-              // Icon(Icons.light_mode_sharp, size: 40, color: state.lamp ? Colors.amber : Colors.white)
                 ,)),
         ],
         backgroundColor: mainFon,
@@ -85,7 +83,7 @@ class SliderWidget extends StatelessWidget {
             width: double.maxFinite,
             child: PageView.builder(
               controller: pageController,
-              onPageChanged: (value) {context.read<CubitCooking>().btnNext(value);},
+              onPageChanged: (value) => context.read<CubitCooking>().btnNext(value),
               itemCount: listStages.length,
               itemBuilder: (context, index) => FittedBox(
                 child: AnimatedContainer(
@@ -93,7 +91,7 @@ class SliderWidget extends StatelessWidget {
                   decoration: const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(16))),
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeInOutCubic,
-                  margin: (state.activePage == index) ? const EdgeInsets.all(0) : const EdgeInsets.all(30),
+                  margin: EdgeInsets.all((state.activePage == index) ? 0 : 30),
                   child: Opacity(
                     opacity: (state.activePage == index) ? 1 : 0.75,
                     child: Transform.scale(
@@ -108,9 +106,7 @@ class SliderWidget extends StatelessWidget {
                                 color: (state.cookingPage == index)
                                     ? Colors.amber
                                     : mainFon,
-                                borderRadius: const BorderRadius.only(
-                                    topLeft: Radius.circular(16),
-                                    topRight: Radius.circular(16))),
+                                borderRadius: const BorderRadius.only(topLeft: Radius.circular(16), topRight: Radius.circular(16))),
                             child: Text(listStages[index].name, style: (state.cookingPage == index) ? t24w700 : t24w700w),
                           ),
                           Container(
@@ -118,12 +114,9 @@ class SliderWidget extends StatelessWidget {
                               height: 331,
                               decoration: const BoxDecoration(
                                   color: Colors.white,
-                                  borderRadius: BorderRadius.only(
-                                      bottomLeft: Radius.circular(16),
-                                      bottomRight: Radius.circular(16))),
+                                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(16), bottomRight: Radius.circular(16))),
                               child: Column(
                                 children: [
-                                  
                                   Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                                     children: [
@@ -131,9 +124,7 @@ class SliderWidget extends StatelessWidget {
                                       TemperatureTextWidget(name: 't продукта:' ,nowIndicate: state.tprod, indicates: listStages[index].tempP,),
                                     ],
                                   ),
-                                    
                                   const SizedBox(height: 24),
-                                    
                                   Container(
                                     width: double.maxFinite,
                                     alignment: Alignment.center,
@@ -150,8 +141,8 @@ class SliderWidget extends StatelessWidget {
                                   SizedBox(
                                     width: 142,
                                     height: 54,
-                                    child: ContanerRadius(Colors.amber, 4, text: (listStages[index].time == 0) ? '∞' : (state.cookingPage == index) ? getTimeString(state.time)  : getTimeString(listStages[index].time), textSize: 1),
-                                  )
+                                    child: ContanerRadius(Colors.amber, 4, text: context.read<CubitCooking>().getTime(listStages[index].time, index)),
+                                   )
                                 ],
                               )),
                         ],
@@ -191,9 +182,13 @@ class FooterWidget extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.timer, size: 40, color: Colors.amber)),
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.timer, size: 40, color: Colors.amber)),
           CircleIndicateWidget(listStages.length, activePage),
-          IconButton(onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context) => const PageRules()));}, icon: const Icon(Icons.back_hand, size: 40, color: Colors.amber))
+          IconButton(
+              onPressed: () => Navigator.pushNamed(context, '/rules'),
+              icon: const Icon(Icons.back_hand, size: 40, color: Colors.amber))
         ],
       ),
     );

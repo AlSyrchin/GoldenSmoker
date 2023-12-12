@@ -46,7 +46,7 @@ class ButtonStartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(onPressed: (){
-      context.read<CubitCreater>().start(recipe);
+      context.read<CubitCreater>().startRecipe(recipe);
       Navigator.push(context,MaterialPageRoute(builder: (context) => PageCooking(recipe)));
       }, 
       icon: const Icon(Icons.not_started_outlined, color: Colors.amber, size: 40));
@@ -58,7 +58,10 @@ class ButtonSettingsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CubitCreater, StateCreater>(builder: (context, state) => IconButton(onPressed: (){context.read<CubitCreater>().toggleBtn();}, icon: Icon(Icons.settings, color: state.isSettings ? Colors.amber : Colors.white, size: 40,)));
+    return BlocBuilder<CubitCreater, StateCreater>(
+        builder: (context, state) => IconButton(
+            onPressed: () => context.read<CubitCreater>().toggleBtn(),
+            icon: Icon(Icons.settings, color: state.isSettings ? Colors.amber : Colors.white, size: 40)));
   }
 }
 
@@ -174,7 +177,7 @@ class DeleteIconWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        onPressed: () => context.read<CubitCreater>().delet(stage, index),
+        onPressed: () => context.read<CubitCreater>().deletItem(stage, index),
         icon: const Icon(Icons.delete_outline, size: 22, color: white06));
   }
 }
@@ -224,7 +227,7 @@ class BtnCookWidget extends StatelessWidget {
       height: h(context, 128),
       child: InkWell(
           onTap: () => {if (recipe.stages.isNotEmpty) Navigator.push(context, MaterialPageRoute(builder: (context) => PageCooking(recipe)))},
-          child: const ContanerRadius(Colors.white, 16 ,text: 'Готовить', textSize: 1)),
+          child: const ContanerRadius(Colors.white, 16 ,text: 'Готовить')),
     );
   }
 }
@@ -243,7 +246,7 @@ class BtnSaveWidget extends StatelessWidget {
             FocusScope.of(context).requestFocus(FocusNode()),
             showDialog(context: context, builder: (context) => DialogWidget(stage)),
           },
-          child: const ContanerRadius(Colors.amber, 16 ,text: 'Сохранить', textSize: 1)),
+          child: const ContanerRadius(Colors.amber, 16 ,text: 'Сохранить')),
     );
   }
 }
@@ -279,7 +282,7 @@ class DialogWidget extends StatelessWidget {
                       // Navigator.of(context).pop();
                       // Navigator.of(context).pop();
                   },
-                  child: const ContanerRadius(Colors.amber, 8, text: 'Готово', textSize: 1),
+                  child: const ContanerRadius(Colors.amber, 8, text: 'Готово'),
                   ),
               )
             ],

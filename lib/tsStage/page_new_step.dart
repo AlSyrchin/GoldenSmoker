@@ -80,7 +80,7 @@ class ButtonAddStage extends StatelessWidget {
           context.read<CubitCreater>().restart();
           Navigator.pop(context);
         },
-        child: const ContanerRadius(Colors.amber, 16, text: 'Добавить', textSize: 1)),
+        child: const ContanerRadius(Colors.amber, 16, text: 'Добавить')),
     );
   }
 }

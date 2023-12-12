@@ -194,8 +194,6 @@ class DataPlata{
   //общение с платой
 }
 
-final plata = DataPlata();
-
 final listRecipe = [
   Recipe('Курица', 'img', 'info Курица', [Related(24,49), Boiling(54, 34, 10), Frying(43, 87)]),
   Recipe('Мясо', 'img', 'info Мясо', [Related(14,41), Drying(42, 43, 23), Smoking(51, 53, 24), Frying(53, 44)]),

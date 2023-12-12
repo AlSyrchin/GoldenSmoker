@@ -15,7 +15,7 @@ class CubitCreater extends Cubit<StateCreater> {
     emit(state.copyWith());
   }
 
-  void delet(List<Stage> stage, int index) {
+  void deletItem(List<Stage> stage, int index) {
     if (stage.isEmpty) return;
     stage.removeAt(index);
     emit(state.copyWith());
@@ -28,7 +28,7 @@ class CubitCreater extends Cubit<StateCreater> {
     emit(state.copyWith());
   }
 
-    void start(Recipe recipe) {
+    void startRecipe(Recipe recipe) {
     String newCom = 'RA_R!';
     for (var stage in recipe.stages) {newCom = '${newCom}_${stage.command}';}
     newCom = '${newCom}_RC';
